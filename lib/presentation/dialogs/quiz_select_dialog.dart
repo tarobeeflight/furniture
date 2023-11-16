@@ -1,11 +1,7 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:furniture/application/state/quiz/select_list/select_list.dart';
-import 'package:furniture/infrastructure/firebase/data_path.dart';
 import 'package:furniture/infrastructure/firebase/firestore_service.dart';
-import 'package:furniture/presentation/pages/quiz/page_quiz_setting.dart';
-import 'package:furniture/presentation/router/app_router.gr.dart';
 import 'package:furniture/presentation/widgets/my_widgets.dart';
 import 'package:furniture/domain/types/types.dart';
 
@@ -29,6 +25,7 @@ class QuizSelectDialogState extends ConsumerState<QuizSelectDialog> {
   Widget build(BuildContext context) {
     final selectList = ref.watch(selectListNotifierProvider);
 
+    // ----------------------------- メソッド -----------------------------
     void onChanged(e) {
       setState(() {
         if (checkIds.contains(e)) {
@@ -68,45 +65,51 @@ class QuizSelectDialogState extends ConsumerState<QuizSelectDialog> {
       return targets;
     }
 
+    // ----------------------------- ウィジェット -----------------------------
+    final checkboxListView = CheckBoxListView(
+      ids: checkIds,
+      onChanged: onChanged,
+      values: selectList.when(
+          data: (d) => d,
+          error: (e, s) => ['error'],
+          loading: () => ['loading']
+      ),
+    );
+
+    final buttonRow = Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        ButtonL(
+            text: '戻る',
+            onPressed: (){
+              Navigator.pop(context, <String>[]);
+            }
+        ),
+        ButtonL(
+            text: '決定',
+            onPressed: () async {
+              final targets = await getTargets();
+              debugPrint('debug targets = ');
+              debugPrint('$targets');
+              Navigator.pop(context, targets); // 絞り込み結果を送る
+            }
+        ),
+      ],
+    );
+
+    // ----------------------------- ダイアログ -----------------------------
     return Dialog(
       child: Column(
         children: [
           Flexible(
               flex: 9,
-              child: CheckBoxListView(
-                ids: checkIds,
-                onChanged: onChanged,
-                values: selectList.when(
-                    data: (d) => d,
-                    error: (e, s) => ['error'],
-                    loading: () => ['loading']
-                ),
-              )
+              child: checkboxListView,
           ),
           Flexible(
             flex: 1,
             child: Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ButtonL(
-                    text: '決定',
-                    onPressed: () async {
-                      final targets = await getTargets();
-                      debugPrint('debug targets = ');
-                      debugPrint('$targets');
-                      Navigator.pop(context, targets); // 絞り込み結果を送る
-                    }
-                  ),
-                  ButtonL(
-                      text: '戻る',
-                      onPressed: (){
-                        Navigator.pop(context, <String>[]);
-                      }
-                  ),
-                ],
-              ),
+              child: buttonRow,
             ),
           ),
         ],

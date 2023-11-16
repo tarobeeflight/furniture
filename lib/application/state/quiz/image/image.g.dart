@@ -6,7 +6,7 @@ part of 'image.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$imageNotifierHash() => r'13cd5df0ebe0bf853830f1d52a7a904ff7ff28a0';
+String _$imageNotifierHash() => r'cd219f7a19a25ced6c1a8d8bc0ae4d075f430bba';
 
 /// See also [ImageNotifier].
 @ProviderFor(ImageNotifier)

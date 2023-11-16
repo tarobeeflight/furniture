@@ -16,6 +16,9 @@ class PageQuiz extends ConsumerWidget {
   final List<Furniture> list;
 
   @override
+
+
+  @override
   Widget build(BuildContext context, WidgetRef ref)  {
 
     // ----------------------------------- ステイト -----------------------------------
@@ -77,7 +80,6 @@ class PageQuiz extends ConsumerWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-
         updateButton,
         image,
         isQuestion ? TestText('この家具は何でしょう？') : detailsText,
