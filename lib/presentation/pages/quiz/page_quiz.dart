@@ -56,9 +56,9 @@ class PageQuiz extends ConsumerWidget {
           );
           // ダイアログを閉じた後
           if(isRetry) {
-            // restart();
             final usecase = RestartUsecase(ref: ref);
-            usecase.restart(list);
+            usecase.restart();
+            context.popRoute();
           }
         }
         else {

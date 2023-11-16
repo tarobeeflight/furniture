@@ -12,13 +12,13 @@ class RestartUsecase {
 
   WidgetRef ref;
 
-  void restart(List<Furniture> list) {
+  void restart(/*List<Furniture> list*/) {
     // インデックスを0に戻す
     final iNoti = ref.read(indexNotifierProvider.notifier);
     iNoti.resetState();
-    // 問題を更新
-    final index = ref.read(indexNotifierProvider);
-    final usecase = UpdateQuestionUsecase(ref: ref);
-    usecase.updateQuestion(list.elementAt(index));
+    // // 問題を更新
+    // final index = ref.read(indexNotifierProvider);
+    // final usecase = UpdateQuestionUsecase(ref: ref);
+    // usecase.updateQuestion(list.elementAt(index));
   }
 }
