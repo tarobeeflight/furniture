@@ -1,13 +1,13 @@
+import 'dart:ffi';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:furniture/application/state/quiz/state.dart';
-import 'package:furniture/application/usecase/quiz/check_last.dart';
 import 'package:furniture/infrastructure/firebase/firestore_service.dart';
 import 'package:furniture/presentation/router/app_router.gr.dart';
 import 'package:furniture/presentation/widgets/my_widgets.dart';
 import 'package:furniture/presentation/dialogs/my_dialogs.dart';
-import 'package:furniture/presentation/theme/images.dart';
 import 'package:furniture/domain/types/types.dart';
 import 'package:furniture/application/usecase/quiz/quiz_usecase.dart';
 import '../../../infrastructure/firebase/data_path.dart';
@@ -24,12 +24,9 @@ class PageQuizSettingState extends ConsumerState<PageQuizSetting>{
 
   int numRadioId = 10;  // ラジオボタンのデフォルト選択
   GENRE genreRadioId = GENRE.all;
-  // List<String> querySelectedIds = [];
 
   @override
   Widget build(BuildContext context)  { // ConsumerStateの場合,refは引数で取らないが持っている
-
-    // final selectList = ref.watch(selectListNotifierProvider);
 
     // --------------------------- メソッド ------------------------
     void onChangedNumRadio(dynamic id) {
@@ -73,13 +70,16 @@ class PageQuizSettingState extends ConsumerState<PageQuizSetting>{
               target: ids.first,
               limit: numRadioId,
           );
-          debugPrint('query = ');
-          debugPrint('$query');
 
           final service = FirestoreService();
           final fList = await service.readFurnitureList(query);
-          debugPrint('debug furniture list from DB');
-          debugPrint('$fList');
+
+          // クイズページで１枚目から問題を表示するための苦肉の策
+          final imageNoti = ref.watch(imageNotifierProvider.notifier);  // readだとダメ
+          final detailsNoti = ref.watch(detailsNotifierProvider.notifier);
+          imageNoti.updateState(fList.first.imageUrl);
+          detailsNoti.updateState(fList.first);
+
           context.navigateTo(RouteQuiz(list: fList));
         }
       }

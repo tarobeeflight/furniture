@@ -36,14 +36,6 @@ class PageQuiz extends ConsumerWidget {
     );
 
     // ----------------------------------- ボタン -----------------------------------
-    final updateButton = ButtonL(
-        text: '更新',
-        onPressed: () {
-          final usecase = UpdateQuestionUsecase(ref: ref);
-          usecase.updateQuestion(list.elementAt(index));
-        }
-    );
-
     final answerButton = ButtonL(
       text: '答え',
       onPressed: () {
@@ -80,7 +72,6 @@ class PageQuiz extends ConsumerWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        updateButton,
         image,
         isQuestion ? TestText('この家具は何でしょう？') : detailsText,
         isQuestion ? answerButton : nextButton,

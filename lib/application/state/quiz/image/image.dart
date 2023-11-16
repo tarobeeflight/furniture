@@ -9,7 +9,7 @@ class ImageNotifier extends _$ImageNotifier {
 
   @override
   Future<Image> build() async {
-    return Images.sunsets;
+    return Images.loading;
   }
 
   Future<void> updateState(String path) async {
