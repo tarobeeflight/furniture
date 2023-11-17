@@ -10,20 +10,33 @@ class QuizEndDialog extends StatelessWidget {
       AlertDialog(
         title: const Text('問題は以上です'),
         actions: [
-          TextButtonM(
+          TextButtonFit(
             text: 'キャンセル',
             onPressed: () {
-              Navigator.pop(context, false);
+              Navigator.pop(context, QuizEndAction.cansel);
             },
           ),
 
-          TextButtonM(
-            text: '最初から',
+          TextButtonFit(
+            text: 'リトライ',
             onPressed: () {
-              Navigator.pop(context, true);
+              Navigator.pop(context, QuizEndAction.retry);
             },
           ),
+
+          TextButtonFit(
+              text: '終了',
+              onPressed: () {
+                Navigator.pop(context, QuizEndAction.end);
+              }
+          )
         ],
     );
   }
+}
+
+enum QuizEndAction {
+  end,
+  retry,
+  cansel,
 }

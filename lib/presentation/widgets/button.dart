@@ -56,3 +56,41 @@ class TextButtonM extends StatelessWidget {
     );
   }
 }
+
+class TextButtonS extends StatelessWidget {
+  TextButtonS({required this.text, required this.onPressed, super.key});
+
+  String text;
+  Function()? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 40,
+      width: 70,
+      child: TextButton(
+        onPressed: onPressed,
+        child: Text(text),
+      ),
+    );
+  }
+}
+
+class TextButtonFit extends StatelessWidget {
+  TextButtonFit({required this.text, required this.onPressed, super.key});
+
+  String text;
+  Function()? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 40,
+      child: TextButton(
+        onPressed: onPressed,
+        child: Text(text),
+      ),
+    );
+  }
+}
+

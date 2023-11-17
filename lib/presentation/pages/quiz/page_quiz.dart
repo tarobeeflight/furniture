@@ -16,11 +16,7 @@ class PageQuiz extends ConsumerWidget {
   final List<Furniture> list;
 
   @override
-
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref)  {
-
+  Widget build(BuildContext context, WidgetRef ref) {
     // ----------------------------------- ステイト -----------------------------------
     final index = ref.watch(indexNotifierProvider);
     final isQuestion = ref.watch(isQuestionNotifierProvider);
@@ -30,17 +26,17 @@ class PageQuiz extends ConsumerWidget {
 
     final imageState = ref.watch(imageNotifierProvider);
     final image = imageState.when(
-        data: (d) => ImageL(d),
-        error: (e, s) => ImageL(Images.error),
-        loading: () => ImageL(Images.loading),
+      data: (d) => ImageL(d),
+      error: (e, s) => ImageL(Images.error),
+      loading: () => ImageL(Images.loading),
     );
 
     // ----------------------------------- ボタン -----------------------------------
     final answerButton = ButtonL(
       text: '答え',
       onPressed: () {
-        final notifier = ref.read(isQuestionNotifierProvider.notifier);
-        final showAnswer = ShowAnswerUsecase(notifier: notifier);
+        final isQuestionNoti = ref.read(isQuestionNotifierProvider.notifier);
+        final showAnswer = ShowAnswerUsecase(notifier: isQuestionNoti);
         showAnswer.showAnswer();
       },
     );
@@ -49,18 +45,13 @@ class PageQuiz extends ConsumerWidget {
       text: '次へ',
       onPressed: () async {
         final checkLast = CheckLastUsecase();
-        if(checkLast.checkLast(index, list)) {
-          final isRetry = await showDialog(
-            context: context,
-            builder: (_) => const QuizEndDialog(),
-          );
-          // ダイアログを閉じた後
-          if(isRetry) {
-            final usecase = RestartUsecase(ref: ref);
-            usecase.restart();
-            context.popRoute();
-          }
+
+        // 最後の問題
+        if (checkLast.checkLast(index, list)) {
+          final endAction = EndActionUsecase(ref: ref);
+          endAction.complete(list, context);
         }
+        // 最後の問題以外
         else {
           final nextQuestion = NextQuestionUsecase(ref: ref);
           nextQuestion.nextQuestion(list);
