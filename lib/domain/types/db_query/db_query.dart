@@ -9,7 +9,7 @@ class DbQuery with _$DbQuery {
   const factory DbQuery({
     required String collection,
     required String property,
-    required String target,
+    required List<String> targets,
     required int limit,
   }) = _DbQuery;
 }

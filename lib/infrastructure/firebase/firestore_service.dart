@@ -48,7 +48,7 @@ class FirestoreService {
     }
     else {
       snapshot = await db.collection(Collection.furniture)
-        .where(query.property, isEqualTo: query.target).limit(query.limit).get();
+        .where(query.property, whereIn: query.targets).limit(query.limit).get();
     }
 
     // DBデータ → List<Furniture>

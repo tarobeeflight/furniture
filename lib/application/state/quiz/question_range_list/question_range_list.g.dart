@@ -7,7 +7,7 @@ part of 'question_range_list.dart';
 // **************************************************************************
 
 String _$questionRangeListNotifierHash() =>
-    r'71443f1bf51b4f0e3f1af69d16202ac2d83ee0d4';
+    r'80958a0162730754925e5d2e3f6ca30648b05449';
 
 /// See also [QuestionRangeListNotifier].
 @ProviderFor(QuestionRangeListNotifier)

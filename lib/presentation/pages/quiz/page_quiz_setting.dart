@@ -68,7 +68,7 @@ class PageQuizSettingState extends ConsumerState<PageQuizSetting>{
         final query = DbQuery(
           collection: Collection.furniture,
           property: getProperty(genreRadioId),
-          target: ids != null ? ids.first : '',
+          targets: ids ?? [],
           limit: numRadioId,
         );
 
