@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +7,9 @@ import 'package:furniture/presentation/router/app_router.gr.dart';
 import 'package:furniture/presentation/widgets/my_widgets.dart';
 import 'package:furniture/presentation/dialogs/my_dialogs.dart';
 import 'package:furniture/domain/types/types.dart';
+import 'package:furniture/application/constants/quiz_constants.dart';
 import 'package:furniture/application/usecase/quiz/quiz_usecase.dart';
-import '../../../infrastructure/firebase/data_path.dart';
+
 
 @RoutePage()
 class PageQuizSetting extends ConsumerStatefulWidget {
@@ -22,7 +21,8 @@ class PageQuizSetting extends ConsumerStatefulWidget {
 
 class PageQuizSettingState extends ConsumerState<PageQuizSetting>{
 
-  int numRadioId = 10;  // ラジオボタンのデフォルト選択
+  // ラジオボタンのデフォルト選択
+  int numRadioId = QuizConstants.quizNumChoices.first;
   GENRE genreRadioId = GENRE.all;
 
   @override
@@ -54,9 +54,11 @@ class PageQuizSettingState extends ConsumerState<PageQuizSetting>{
     final decideButton = ButtonL(
       text: '決定',
       onPressed: () async {
-        final noti = ref.read(selectListNotifierProvider.notifier);
+        // 選択中の出題ジャンルから問題範囲リストを更新
+        final noti = ref.read(questionRangeListNotifierProvider.notifier);
         noti.updateState(genreRadioId);
 
+        // 問題選択ダイアログを表示して出題する問題リストを取得 ---------------- ここから
         final ids = await showDialog<List<String>>(
             context: context,
             builder: (_) => QuizSelectDialog(
@@ -94,7 +96,7 @@ class PageQuizSettingState extends ConsumerState<PageQuizSetting>{
             RadioButtonRow(
               id: numRadioId,
               onChanged: onChangedNumRadio,
-              values: const [10, 30, 50],
+              values: QuizConstants.quizNumChoices,
             ),
             const Text('絞り込み'),
             RadioButtonColumn(

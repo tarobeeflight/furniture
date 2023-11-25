@@ -3,12 +3,11 @@ import 'package:furniture/infrastructure/firebase/firestore_service.dart';
 import 'package:furniture/presentation/pages/quiz/page_quiz_setting.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../../presentation/dialogs/quiz_select_dialog.dart';
-part 'select_list.g.dart';
+part 'question_range_list.g.dart';
 
 
 @riverpod
-class SelectListNotifier extends _$SelectListNotifier {
+class QuestionRangeListNotifier extends _$QuestionRangeListNotifier {
   @override
   Future<List<String>> build() async {
     final service = FirestoreService();

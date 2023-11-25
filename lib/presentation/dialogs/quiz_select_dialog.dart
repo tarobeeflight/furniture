@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:furniture/application/state/quiz/select_list/select_list.dart';
+import 'package:furniture/application/state/quiz/state.dart';
 import 'package:furniture/infrastructure/firebase/firestore_service.dart';
 import 'package:furniture/presentation/widgets/my_widgets.dart';
 import 'package:furniture/domain/types/types.dart';
@@ -19,61 +19,63 @@ class QuizSelectDialog extends ConsumerStatefulWidget {
 
 class QuizSelectDialogState extends ConsumerState<QuizSelectDialog> {
 
-  List<String> checkIds = [];
+  // チェックボックスで選択されているアイテム
+  List<String> checkedItems = [];
 
   @override
   Widget build(BuildContext context) {
-    final selectList = ref.watch(selectListNotifierProvider);
+    final rangeListAsyncData = ref.watch(questionRangeListNotifierProvider);
+    final rangeList = rangeListAsyncData.when(
+        data: (d) => d,
+        error: (e, s) => ['error'],
+        loading: () => ['loading']
+    );
 
     // ----------------------------- メソッド -----------------------------
     void onChanged(e) {
       setState(() {
-        if (checkIds.contains(e)) {
+        if (checkedItems.contains(e)) {
           // すでにチェックされていたら取り除く
-          checkIds.remove(e);
+          checkedItems.remove(e);
         } else {
           // まだチェックされていなければ追加
-          checkIds.add(e);
+          checkedItems.add(e);
         }
       });
-      debugPrint('$checkIds');
     }
 
-    Future<List<String>> getTargets() async {
-      // チェックボックスのセレクトリストからbrandId, designerIdなどに変換する
+    Future<List<String>> convertItemsToDatabaseIds() async {
+
       final service = FirestoreService();
+      List<String> ids = [];
 
-      List<String> targets = [];
-
+      // デザイナーが選択されているとき
       if(widget.genre == GENRE.designer){
-        for (String id in checkIds){  // list.foreachやと非同期処理が上手くいかない。原因不明。
-          String target = await service.searchDesignerId(id);
-          debugPrint('designer target = ');
-          debugPrint(target);
-          targets.add(target);
+        for (String item in checkedItems){  // list.foreachやと非同期処理が上手くいかない。原因不明。
+          String id = await service.searchDesignerId(item);
+          ids.add(id);
         }
-      } else if(widget.genre == GENRE.brand) {
-        for (String id in checkIds){
-          String target = await service.searchBrandId(id);
-          debugPrint('brand target = ');
-          debugPrint(target);
-          targets.add(target);
-        }
-      } else if(widget.genre == GENRE.culture) {
-        targets.add('genre');
       }
-      return targets;
+      // ブランドが選択されているとき
+      else if(widget.genre == GENRE.brand) {
+        for (String item in checkedItems){
+          String id = await service.searchBrandId(item);
+          ids.add(id);
+        }
+      }
+      // 文化が選択されているとき
+      else if(widget.genre == GENRE.culture) {
+        // TODO : デザイナーから文化を検索して、そのデザイナーIDを返す
+        ids.add('genre');
+      }
+      return ids;
     }
 
     // ----------------------------- ウィジェット -----------------------------
     final checkboxListView = CheckBoxListView(
-      ids: checkIds,
+      ids: checkedItems,
       onChanged: onChanged,
-      values: selectList.when(
-          data: (d) => d,
-          error: (e, s) => ['error'],
-          loading: () => ['loading']
-      ),
+      values: rangeList,
     );
 
     final buttonRow = Row(
@@ -88,9 +90,7 @@ class QuizSelectDialogState extends ConsumerState<QuizSelectDialog> {
         ButtonL(
             text: '決定',
             onPressed: () async {
-              final targets = await getTargets();
-              debugPrint('debug targets = ');
-              debugPrint('$targets');
+              final targets = await convertItemsToDatabaseIds();
               Navigator.pop(context, targets); // 絞り込み結果を送る
             }
         ),

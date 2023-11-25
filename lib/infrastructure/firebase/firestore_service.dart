@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:furniture/domain/types/types.dart';
 import 'package:furniture/infrastructure/firebase/data_path.dart';
 
+export 'package:furniture/infrastructure/firebase/data_path.dart';
 
 class FirestoreService {
   final db = FirebaseFirestore.instance;
