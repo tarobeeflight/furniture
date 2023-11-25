@@ -25,6 +25,7 @@ mixin _$Brand {
   String get country => throw _privateConstructorUsedError;
   int get foundedYear => throw _privateConstructorUsedError;
   int? get bankruptcyYear => throw _privateConstructorUsedError;
+  String get memo => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -41,7 +42,8 @@ abstract class $BrandCopyWith<$Res> {
       String jaName,
       String country,
       int foundedYear,
-      int? bankruptcyYear});
+      int? bankruptcyYear,
+      String memo});
 }
 
 /// @nodoc
@@ -62,6 +64,7 @@ class _$BrandCopyWithImpl<$Res, $Val extends Brand>
     Object? country = null,
     Object? foundedYear = null,
     Object? bankruptcyYear = freezed,
+    Object? memo = null,
   }) {
     return _then(_value.copyWith(
       enName: null == enName
@@ -84,6 +87,10 @@ class _$BrandCopyWithImpl<$Res, $Val extends Brand>
           ? _value.bankruptcyYear
           : bankruptcyYear // ignore: cast_nullable_to_non_nullable
               as int?,
+      memo: null == memo
+          ? _value.memo
+          : memo // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -100,7 +107,8 @@ abstract class _$$BrandImplCopyWith<$Res> implements $BrandCopyWith<$Res> {
       String jaName,
       String country,
       int foundedYear,
-      int? bankruptcyYear});
+      int? bankruptcyYear,
+      String memo});
 }
 
 /// @nodoc
@@ -119,6 +127,7 @@ class __$$BrandImplCopyWithImpl<$Res>
     Object? country = null,
     Object? foundedYear = null,
     Object? bankruptcyYear = freezed,
+    Object? memo = null,
   }) {
     return _then(_$BrandImpl(
       enName: null == enName
@@ -141,6 +150,10 @@ class __$$BrandImplCopyWithImpl<$Res>
           ? _value.bankruptcyYear
           : bankruptcyYear // ignore: cast_nullable_to_non_nullable
               as int?,
+      memo: null == memo
+          ? _value.memo
+          : memo // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -153,7 +166,8 @@ class _$BrandImpl extends _Brand with DiagnosticableTreeMixin {
       required this.jaName,
       required this.country,
       required this.foundedYear,
-      this.bankruptcyYear})
+      this.bankruptcyYear,
+      required this.memo})
       : super._();
 
   factory _$BrandImpl.fromJson(Map<String, dynamic> json) =>
@@ -169,10 +183,12 @@ class _$BrandImpl extends _Brand with DiagnosticableTreeMixin {
   final int foundedYear;
   @override
   final int? bankruptcyYear;
+  @override
+  final String memo;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Brand(enName: $enName, jaName: $jaName, country: $country, foundedYear: $foundedYear, bankruptcyYear: $bankruptcyYear)';
+    return 'Brand(enName: $enName, jaName: $jaName, country: $country, foundedYear: $foundedYear, bankruptcyYear: $bankruptcyYear, memo: $memo)';
   }
 
   @override
@@ -184,7 +200,8 @@ class _$BrandImpl extends _Brand with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('jaName', jaName))
       ..add(DiagnosticsProperty('country', country))
       ..add(DiagnosticsProperty('foundedYear', foundedYear))
-      ..add(DiagnosticsProperty('bankruptcyYear', bankruptcyYear));
+      ..add(DiagnosticsProperty('bankruptcyYear', bankruptcyYear))
+      ..add(DiagnosticsProperty('memo', memo));
   }
 
   @override
@@ -198,13 +215,14 @@ class _$BrandImpl extends _Brand with DiagnosticableTreeMixin {
             (identical(other.foundedYear, foundedYear) ||
                 other.foundedYear == foundedYear) &&
             (identical(other.bankruptcyYear, bankruptcyYear) ||
-                other.bankruptcyYear == bankruptcyYear));
+                other.bankruptcyYear == bankruptcyYear) &&
+            (identical(other.memo, memo) || other.memo == memo));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType, enName, jaName, country, foundedYear, bankruptcyYear);
+      runtimeType, enName, jaName, country, foundedYear, bankruptcyYear, memo);
 
   @JsonKey(ignore: true)
   @override
@@ -226,7 +244,8 @@ abstract class _Brand extends Brand {
       required final String jaName,
       required final String country,
       required final int foundedYear,
-      final int? bankruptcyYear}) = _$BrandImpl;
+      final int? bankruptcyYear,
+      required final String memo}) = _$BrandImpl;
   const _Brand._() : super._();
 
   factory _Brand.fromJson(Map<String, dynamic> json) = _$BrandImpl.fromJson;
@@ -241,6 +260,8 @@ abstract class _Brand extends Brand {
   int get foundedYear;
   @override
   int? get bankruptcyYear;
+  @override
+  String get memo;
   @override
   @JsonKey(ignore: true)
   _$$BrandImplCopyWith<_$BrandImpl> get copyWith =>

@@ -12,6 +12,7 @@ _$BrandImpl _$$BrandImplFromJson(Map<String, dynamic> json) => _$BrandImpl(
       country: json['country'] as String,
       foundedYear: json['foundedYear'] as int,
       bankruptcyYear: json['bankruptcyYear'] as int?,
+      memo: json['memo'] as String,
     );
 
 Map<String, dynamic> _$$BrandImplToJson(_$BrandImpl instance) =>
@@ -21,4 +22,5 @@ Map<String, dynamic> _$$BrandImplToJson(_$BrandImpl instance) =>
       'country': instance.country,
       'foundedYear': instance.foundedYear,
       'bankruptcyYear': instance.bankruptcyYear,
+      'memo': instance.memo,
     };

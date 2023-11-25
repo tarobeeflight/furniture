@@ -14,11 +14,10 @@ class Brand with _$Brand {
     required String country,
     required int foundedYear,
     int? bankruptcyYear,
+    required String memo,
   }) = _Brand;
 
  factory Brand.fromJson(Map<String, dynamic> json) => _$BrandFromJson(json);
-
-
 
  String get period => '$foundedYear - ${bankruptcyYear ?? ''}';
  String get details => '$jaName\n$enName\n設立年：$period\n本国：$country';
