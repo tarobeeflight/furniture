@@ -57,6 +57,7 @@ class RadioButtonColumn extends StatelessWidget {
     }).toList();
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: radioTiles,
     );
   }

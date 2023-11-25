@@ -90,14 +90,15 @@ class PageQuizSettingState extends ConsumerState<PageQuizSetting>{
     return Scaffold(
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            const Text('問題数'),
+            const Text('問題数', style: TextStyle(fontSize: 20),),
             RadioButtonRow(
               id: numRadioId,
               onChanged: onChangedNumRadio,
               values: QuizConstants.quizNumChoices,
             ),
-            const Text('絞り込み'),
+            const Text('絞り込み', style: TextStyle(fontSize: 20),),
             RadioButtonColumn(
               id: genreRadioId,
               onChanged: onChangedGenreRadio,
