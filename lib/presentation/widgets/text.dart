@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class TestText extends StatelessWidget {
-  TestText(this.text, {super.key});
+class QuizText extends StatelessWidget {
+  QuizText(this.text, {super.key});
 
   String text;
 

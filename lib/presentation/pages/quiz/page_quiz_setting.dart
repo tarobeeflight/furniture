@@ -41,7 +41,7 @@ class PageQuizSettingState extends ConsumerState<PageQuizSetting>{
     }
     String getProperty(GENRE genre) {
       final property = switch(genre) {
-        GENRE.all => 'all',
+        GENRE.all => FurnitureProperty.all,
         GENRE.designer => FurnitureProperty.designerId,
         GENRE.brand => FurnitureProperty.brandId,
         GENRE.culture => 'culture',
@@ -54,36 +54,35 @@ class PageQuizSettingState extends ConsumerState<PageQuizSetting>{
     final decideButton = ButtonL(
       text: '決定',
       onPressed: () async {
-        // 選択中の出題ジャンルから問題範囲リストを更新
-        final noti = ref.read(questionRangeListNotifierProvider.notifier);
-        noti.updateState(genreRadioId);
+        List<String>? ids;
 
-        // 問題選択ダイアログを表示して出題する問題リストを取得 ---------------- ここから
-        final ids = await showDialog<List<String>>(
+        // 「全て」以外を選択中なら範囲選択ダイアログを表示
+        if(genreRadioId != GENRE.all) {
+          ids = await showDialog<List<String>>(
             context: context,
-            builder: (_) => QuizSelectDialog(
-              genre: genreRadioId,
-            ),
-        );
-        if(ids!.isNotEmpty) {
-          final query = DbQuery(
-              collection: Collection.furniture,
-              property: getProperty(genreRadioId),
-              target: ids.first,
-              limit: numRadioId,
+            builder: (_) => QuizSelectDialog(genre: genreRadioId,),
           );
-
-          final service = FirestoreService();
-          final fList = await service.readFurnitureList(query);
-
-          // クイズページで１枚目から問題を表示するための苦肉の策
-          final imageNoti = ref.watch(imageNotifierProvider.notifier);  // readだとダメ
-          final detailsNoti = ref.watch(detailsNotifierProvider.notifier);
-          imageNoti.updateState(fList.first.imageUrl);
-          detailsNoti.updateState(fList.first);
-
-          context.navigateTo(RouteQuiz(list: fList));
         }
+
+        // クエリを作成
+        final query = DbQuery(
+          collection: Collection.furniture,
+          property: getProperty(genreRadioId),
+          target: ids != null ? ids.first : '',
+          limit: numRadioId,
+        );
+
+        // DBから家具リストを取得
+        final service = FirestoreService();
+        final fList = await service.readFurnitureList(query);
+
+        // クイズページで１枚目から問題を表示するための苦肉の策
+        final imageNoti = ref.watch(imageNotifierProvider.notifier);  // readだとダメ
+        final detailsNoti = ref.watch(detailsNotifierProvider.notifier);
+        imageNoti.updateState(fList.first.imageUrl);
+        detailsNoti.updateState(fList.first);
+
+        context.navigateTo(RouteQuiz(list: fList));
       }
     );
 

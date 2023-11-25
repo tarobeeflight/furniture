@@ -38,14 +38,15 @@ class FirestoreService {
 
   // 家具一覧を取得
   Future<List<Furniture>> readFurnitureList(DbQuery? query) async {
-    debugPrint('enter readFurnitureList()');
     // DBから家具一覧のデータを取得
     QuerySnapshot<Map<String, dynamic>> snapshot;
     if(query == null){
-      debugPrint('query is null');
-      snapshot = await db.collection(Collection.furniture).get();
-    } else {
-      debugPrint('query is not null');
+      // TODO: エラーの方がいい？
+      snapshot = await db.collection(Collection.furniture).limit(1).get();
+    } else if(query.property == FurnitureProperty.all) {
+      snapshot = await db.collection(Collection.furniture).limit(query.limit).get();
+    }
+    else {
       snapshot = await db.collection(Collection.furniture)
         .where(query.property, isEqualTo: query.target).limit(query.limit).get();
     }
@@ -57,7 +58,6 @@ class FirestoreService {
       furnitureList.add(f);
     }
 
-    debugPrint('leave readFurnitureList()');
     return furnitureList;
   }
 

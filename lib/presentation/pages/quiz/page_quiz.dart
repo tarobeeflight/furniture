@@ -21,15 +21,17 @@ class PageQuiz extends ConsumerWidget {
     final index = ref.watch(indexNotifierProvider);
     final isQuestion = ref.watch(isQuestionNotifierProvider);
 
-    final details = ref.watch(detailsNotifierProvider);
-    final detailsText = TestText(details);
-
-    final imageState = ref.watch(imageNotifierProvider);
-    final image = imageState.when(
+    // 画像ステイトを監視
+    final imageAsyncValue = ref.watch(imageNotifierProvider);
+    final image = imageAsyncValue.when(
       data: (d) => ImageL(d),
       error: (e, s) => ImageL(Images.error),
       loading: () => ImageL(Images.loading),
     );
+
+    // 詳細テキストステイトを監視
+    final details = ref.watch(detailsNotifierProvider);
+    final detailsText = QuizText(details);
 
     // ----------------------------------- ボタン -----------------------------------
     final answerButton = ButtonL(
@@ -64,7 +66,7 @@ class PageQuiz extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         image,
-        isQuestion ? TestText('この家具は何でしょう？') : detailsText,
+        isQuestion ? QuizText('この家具は何でしょう？') : detailsText,
         isQuestion ? answerButton : nextButton,
       ],
     );

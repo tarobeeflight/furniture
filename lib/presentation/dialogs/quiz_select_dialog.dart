@@ -24,9 +24,12 @@ class QuizSelectDialogState extends ConsumerState<QuizSelectDialog> {
 
   @override
   Widget build(BuildContext context) {
+    // 問題範囲リストステイトを監視
     final rangeListAsyncData = ref.watch(questionRangeListNotifierProvider);
+    // 問題範囲リストステイトを選択中のジャンルに合わせて更新
     final rangeListNotifier = ref.read(questionRangeListNotifierProvider.notifier);
     rangeListNotifier.updateState(widget.genre);
+    // 表示する問題範囲を取得
     final rangeList = rangeListAsyncData.when(
         data: (d) => d,
         error: (e, s) => ['error'],

@@ -7,6 +7,7 @@ class Collection {
 }
 
 class FurnitureProperty {
+  static const String all = 'all';
   static const String brandId = 'brandId';
   static const String designerId = 'designerId';
   static const String type = 'type';
