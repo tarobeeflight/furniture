@@ -25,6 +25,8 @@ class QuizSelectDialogState extends ConsumerState<QuizSelectDialog> {
   @override
   Widget build(BuildContext context) {
     final rangeListAsyncData = ref.watch(questionRangeListNotifierProvider);
+    final rangeListNotifier = ref.read(questionRangeListNotifierProvider.notifier);
+    rangeListNotifier.updateState(widget.genre);
     final rangeList = rangeListAsyncData.when(
         data: (d) => d,
         error: (e, s) => ['error'],

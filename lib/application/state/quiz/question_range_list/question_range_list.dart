@@ -10,10 +10,7 @@ part 'question_range_list.g.dart';
 class QuestionRangeListNotifier extends _$QuestionRangeListNotifier {
   @override
   Future<List<String>> build() async {
-    final service = FirestoreService();
-    final dList = await service.readDesignerList();
-    final list = dList.map((e) => e.jaName).toList();
-    return list;
+    return ['loading'];
   }
 
   void resetState() {
