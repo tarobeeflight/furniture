@@ -1,29 +1,6 @@
-// ----------------------------------main.dart----------------------------------------
-
-// import 'package:flutter/material.dart';
-// import 'package:furniture_master/models/brand.dart';
-// import 'package:furniture_master/models/designer.dart';
-// import 'package:furniture_master/models/furniture.dart';
-// import 'package:furniture_master/test.dart';
-//
-// void main() {
-//   runApp(const MyApp());
-// }
-//
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) =>
-//       MaterialApp(
-//         theme: ThemeData(primarySwatch: Colors.blue),
-//         home: _IconScreen(),
-//       );
-// }
-//
 
 //
-//
+//多分、デザイナー一覧、ブランド一覧画面
 // class _ListViewDividedByCountry extends StatelessWidget {
 //   _ListViewDividedByCountry({super.key});
 //
@@ -67,6 +44,7 @@
 //       );
 // }
 //
+// 多分、デザイナー詳細、ブランド詳細画面
 // class _ListViewInColumnScreen extends StatelessWidget {
 //   _ListViewInColumnScreen({super.key});
 //
@@ -102,132 +80,6 @@
 //
 // }
 //
-// class _StackScreen extends StatefulWidget {
-//   const _StackScreen({super.key});
-//
-//   @override
-//   State<_StackScreen> createState() => _StackScreenState();
-// }
-// class _StackScreenState extends State<_StackScreen> {
-//   bool isVanishMemo = true;
-//
-//   Widget _stackMemo() =>
-//       Center(
-//         child: Container(
-//           height: 500,
-//           width: 300,
-//           decoration: BoxDecoration(
-//             color: Colors.grey[200],
-//             borderRadius: BorderRadius.circular(10),
-//           ),
-//           child: Column(
-//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//             children: [
-//               Container(
-//                 height: 50,
-//                 width: 300,
-//                 alignment: Alignment.centerLeft,
-//                 decoration: const BoxDecoration(
-//                   color: Colors.blue,
-//                   borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-//                 ),
-//                 child: const Padding(
-//                   padding: EdgeInsets.only(left: 30),
-//                   child: Text('メモ',
-//                     style: TextStyle(
-//                         color: Colors.white,
-//                         fontSize: 20,
-//                         fontWeight: FontWeight.w500
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//               Padding(
-//                 padding: EdgeInsets.all(10.0),
-//                 child: TextField(
-//                   controller: TextEditingController(text: 'aaaaa'),  // ここにメモの値を入れる
-//                   keyboardType: TextInputType.multiline,
-//                   maxLines: 17,
-//                   decoration: const InputDecoration(
-//                     border: OutlineInputBorder(),
-//                   ),
-//                 ),
-//               ),
-//               Padding(
-//                 padding: const EdgeInsets.only(bottom: 10),
-//                 child: Row(
-//                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                   children: [
-//                     SizedBox(
-//                       width: 110,
-//                       child: ElevatedButton(
-//                         onPressed: () {},
-//                         child: const Text('キャンセル'),
-//                       ),
-//                     ),
-//                     SizedBox(
-//                       width: 110,
-//                       child: ElevatedButton(
-//                         onPressed: () {},
-//                         child: const Text('OK'),
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               )
-//             ],
-//           ),
-//         ),
-//       );
-//
-//   Widget _stackMemoOutside() =>
-//       GestureDetector(
-//
-//         onTap: () {
-//           setState(() {
-//             isVanishMemo = true;
-//           });
-//         },
-//         child: Container(
-//           color: Colors.grey.withOpacity(0.5),
-//         ),
-//       );
-//
-//   @override
-//   Widget build(BuildContext context) =>
-//       Scaffold(
-//         body: Center(
-//           child: Stack(
-//             children: [
-//               ListView.builder(
-//                   itemCount: 15,
-//                   itemBuilder: (context, index) =>
-//                       ListTile(
-//                         title: Text('title$index'),
-//                         subtitle: Text('subtitle$index'),
-//                       )
-//               ),
-//               Offstage(
-//                 offstage: isVanishMemo,
-//                 child: _stackMemoOutside(),
-//               ),
-//               Offstage(
-//                 offstage: isVanishMemo,
-//                 child: _stackMemo(),
-//               ),
-//             ],
-//           ),
-//         ),
-//         floatingActionButton: FloatingActionButton(
-//             onPressed: () {
-//               setState(() {
-//                 isVanishMemo = false;
-//               });
-//             },
-//             child: const Text('button')
-//         ),
-//       );
-// }
 //
 // class _CardScreen extends StatelessWidget {
 //   const _CardScreen({super.key});

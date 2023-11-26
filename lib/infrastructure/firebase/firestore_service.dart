@@ -99,6 +99,137 @@ class FirestoreService {
 
     return id;
   }
+
+  // --------------------------------------------テスト-------------------------------
+
+  static final designerList = [
+    Designer(
+      enName: 'Murata Shotaro',
+      jaName: '村田勝太郎',
+      country: 'ドイツ',
+      culture: 'ヨーロッパ',
+      birthday: DateTime(1998, 5, 24),
+      faceUrl: 'faceUrl',
+      memo: 'memo'
+    ),
+    Designer(
+      enName: 'Inazumi Rico',
+      jaName: '稲角理子',
+      country: '韓国',
+      culture: 'アジア',
+      birthday: DateTime(1998, 12, 4),
+      faceUrl: 'faceUrl',
+      memo: 'memo'
+    ),
+    Designer(
+      enName: 'Onoue Yudai',
+      jaName: '尾上雄大',
+      country: 'イタリア',
+      culture: 'ヨーロッパ',
+      birthday: DateTime(1998, 8, 13),
+      faceUrl: 'faceUrl',
+      memo: 'memo'
+    ),
+  ];
+  static final brandList = [
+    const Brand(
+      enName: 'TOYOTA',
+      jaName: 'トヨタ',
+      country: '日本',
+      foundedYear: 1876,
+      memo: 'memo'
+    ),
+    const Brand(
+        enName: 'Audi',
+        jaName: 'アウディ',
+        country: 'ドイツ',
+        foundedYear: 1776,
+        memo: 'memo'
+    ),
+    const Brand(
+        enName: 'Caderac',
+        jaName: 'キャデラック',
+        country: 'アメリカ',
+        foundedYear: 1899,
+        memo: 'memo'
+    ),
+  ];
+  static final furnitureList = [
+    Furniture(
+      enName: 'Prius',
+      jaName: 'プリウス',
+      designedYear: 2002,
+      type: 'ハッチバック',
+      designer: designerList.elementAt(0),
+      brand: brandList.elementAt(0),
+      imageUrl: 'imageUrl',
+      memo: 'memo'
+    ),
+    Furniture(
+        enName: 'Crown',
+        jaName: 'クラウン',
+        designedYear: 1998,
+        type: 'セダン',
+        designer: designerList.elementAt(0),
+        brand: brandList.elementAt(0),
+        imageUrl: 'imageUrl',
+        memo: 'memo'
+    ),
+    Furniture(
+        enName: 'Sentry',
+        jaName: 'センチュリー',
+        designedYear: 1990,
+        type: 'セダン',
+        designer: designerList.elementAt(0),
+        brand: brandList.elementAt(0),
+        imageUrl: 'imageUrl',
+        memo: 'memo'
+    ),
+    Furniture(
+        enName: 'A6',
+        jaName: 'A6',
+        designedYear: 2012,
+        type: 'ステーションワゴン',
+        designer: designerList.elementAt(1),
+        brand: brandList.elementAt(1),
+        imageUrl: 'imageUrl',
+        memo: 'memo'
+    ),
+    Furniture(
+        enName: 'TT',
+        jaName: 'TT',
+        designedYear: 1996,
+        type: 'カブリオレ',
+        designer: designerList.elementAt(1),
+        brand: brandList.elementAt(1),
+        imageUrl: 'imageUrl',
+        memo: 'memo'
+    ),
+    Furniture(
+        enName: 'escarade',
+        jaName: 'エスカレード',
+        designedYear: 2020,
+        type: 'SUV',
+        designer: designerList.elementAt(2),
+        brand: brandList.elementAt(2),
+        imageUrl: 'imageUrl',
+        memo: 'memo'
+    ),
+    Furniture(
+        enName: 'Eldrad',
+        jaName: 'エルドラド',
+        designedYear: 2002,
+        type: 'SUV',
+        designer: designerList.elementAt(2),
+        brand: brandList.elementAt(2),
+        imageUrl: 'imageUrl',
+        memo: 'memo'
+    ),
+  ];
+  // テスト用の通信をしない家具リスト
+  List<Furniture> testGetFurnitureList(){
+    return furnitureList;
+  }
 }
 
 
