@@ -43,7 +43,7 @@ class FirestoreService {
     if(query == null){
       // TODO: エラーの方がいい？
       snapshot = await db.collection(Collection.furniture).limit(1).get();
-    } else if(query.property == FurnitureProperty.all) {
+    } else if(query.property == FurnitureField.all) {
       snapshot = await db.collection(Collection.furniture).limit(query.limit).get();
     }
     else {
@@ -86,7 +86,7 @@ class FirestoreService {
   // デザイナーIDを検索
   Future<String> searchDesignerId(String jaName) async {
     final snapshot = await db.collection(Collection.designers)
-        .where(DesignerProperty.jaName, isEqualTo: jaName).limit(1).get();
+        .where(DesignerField.jaName, isEqualTo: jaName).limit(1).get();
     final id = snapshot.docs.first.id;
 
     return id;
@@ -94,7 +94,7 @@ class FirestoreService {
   // ブランドIDを検索
   Future<String> searchBrandId(String jaName) async {
     final snapshot = await db.collection(Collection.brands)
-        .where(DesignerProperty.jaName, isEqualTo: jaName).limit(1).get();
+        .where(DesignerField.jaName, isEqualTo: jaName).limit(1).get();
     final id = snapshot.docs.first.id;
 
     return id;

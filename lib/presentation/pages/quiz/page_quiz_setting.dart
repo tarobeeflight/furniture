@@ -9,6 +9,7 @@ import 'package:furniture/presentation/dialogs/my_dialogs.dart';
 import 'package:furniture/domain/types/types.dart';
 import 'package:furniture/application/constants/quiz_constants.dart';
 import 'package:furniture/application/usecase/quiz/quiz_usecase.dart';
+import 'package:furniture/application/usecase/database/database_usecase.dart';
 
 
 @RoutePage()
@@ -39,16 +40,6 @@ class PageQuizSettingState extends ConsumerState<PageQuizSetting>{
         genreRadioId = id;
       });
     }
-    String getProperty(GENRE genre) {
-      final property = switch(genre) {
-        GENRE.all => FurnitureProperty.all,
-        GENRE.designer => FurnitureProperty.designerId,
-        GENRE.brand => FurnitureProperty.brandId,
-        GENRE.culture => 'culture',
-      };
-
-      return property;
-    }
 
     // --------------------------- ボタン ------------------------
     final decideButton = ButtonL(
@@ -64,17 +55,10 @@ class PageQuizSettingState extends ConsumerState<PageQuizSetting>{
           );
         }
 
-        // クエリを作成
-        final query = DbQuery(
-          collection: Collection.furniture,
-          property: getProperty(genreRadioId),
-          targets: ids ?? [],
-          limit: numRadioId,
-        );
+        // DBから家具リストをランダムで取得
+        final usecase = FurnitureDbUsecase();
+        final fList = await usecase.getRandomFurniture(numRadioId, genreRadioId, ids);
 
-        // DBから家具リストを取得
-        final service = FirestoreService();
-        final fList = await service.readFurnitureList(query);
 
         // クイズページで１枚目から問題を表示するための苦肉の策
         final imageNoti = ref.watch(imageNotifierProvider.notifier);  // readだとダメ

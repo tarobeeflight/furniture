@@ -15,7 +15,7 @@ class PageFurnitureList extends StatelessWidget {
   Widget build(BuildContext context) {
     const query = DbQuery(
       collection: Collection.furniture,
-      property: FurnitureProperty.all,
+      property: FurnitureField.all,
       targets: [],
       limit: 30
     );

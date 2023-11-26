@@ -1,0 +1,1 @@
+export 'package:furniture/application/usecase/database/furniture_db.dart';

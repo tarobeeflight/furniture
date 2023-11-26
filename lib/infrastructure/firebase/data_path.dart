@@ -6,18 +6,18 @@ class Collection {
   static const String songs = 'songs';
 }
 
-class FurnitureProperty {
+class FurnitureField {
   static const String all = 'all';
   static const String brandId = 'brandId';
   static const String designerId = 'designerId';
   static const String type = 'type';
 }
 
-class DesignerProperty {
+class DesignerField {
   static const String jaName = 'jaName';
   static const String culture = 'culture';
 }
 
-class BrandProperty {
+class BrandField {
   static const String jaName = 'jaName';
 }
