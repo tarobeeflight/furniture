@@ -55,16 +55,41 @@ class PageQuiz extends ConsumerWidget {
         }
         // 最後の問題以外
         else {
-          final nextQuestion = NextQuestionUsecase(ref: ref);
+          final nextQuestion = ChangeQuestionUsecase(ref: ref);
           nextQuestion.nextQuestion(list);
         }
       },
+    );
+
+    final homeButton = IconButton(
+      icon: const Icon(Icons.home),
+      onPressed: () {
+        Navigator.pop(context, QuizEndAction.end);
+      },
+    );
+
+    final backButton = IconButton(
+      icon: const Icon(Icons.replay),
+      onPressed: () {
+        final usecase = ChangeQuestionUsecase(ref: ref);
+        usecase.backQuestion(list);
+      },
+    );
+
+    // ----------------------------------- アイコン行 -----------------------------------
+    final iconRow = Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        homeButton,
+        backButton,
+      ],
     );
 
     // ----------------------------------- ページ -----------------------------------
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
+        iconRow,
         image,
         isQuestion ? QuizText('この家具は何でしょう？') : detailsText,
         isQuestion ? answerButton : nextButton,
