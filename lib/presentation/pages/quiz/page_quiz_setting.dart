@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:furniture/application/state/quiz/state.dart';
-import 'package:furniture/infrastructure/firebase/firestore_service.dart';
 import 'package:furniture/presentation/router/app_router.gr.dart';
 import 'package:furniture/presentation/widgets/my_widgets.dart';
 import 'package:furniture/presentation/dialogs/my_dialogs.dart';
@@ -77,18 +76,29 @@ class PageQuizSettingState extends ConsumerState<PageQuizSetting>{
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            const Text('問題数', style: TextStyle(fontSize: 20),),
-            RadioButtonRow(
-              id: numRadioId,
-              onChanged: onChangedNumRadio,
-              values: QuizConstants.quizNumChoices,
+            Column(
+              children: [
+                const Text('問題数', style: TextStyle(fontSize: 20),),
+                RadioButtonRow(
+                  id: numRadioId,
+                  onChanged: onChangedNumRadio,
+                  values: QuizConstants.quizNumChoices,
+                ),
+              ],
             ),
-            const Text('絞り込み', style: TextStyle(fontSize: 20),),
-            RadioButtonColumn(
-              id: genreRadioId,
-              onChanged: onChangedGenreRadio,
-              values: GENRE.values,
+
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                const Text('絞り込み', style: TextStyle(fontSize: 20),),
+                RadioButtonColumn(
+                  id: genreRadioId,
+                  onChanged: onChangedGenreRadio,
+                  values: GENRE.values,
+                ),
+              ],
             ),
+
             decideButton,
           ],
         ),

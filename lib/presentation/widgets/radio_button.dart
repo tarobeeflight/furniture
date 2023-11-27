@@ -49,6 +49,7 @@ class RadioButtonColumn extends StatelessWidget {
 
     final radioTiles = values.map((e) {
       return RadioListTile(
+        contentPadding: const EdgeInsets.only(left: 140),
         groupValue: id,
         title: Text('$e'),
         value: e,
