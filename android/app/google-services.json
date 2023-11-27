@@ -7,6 +7,25 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:230630925543:android:31a1943e4e9e2890ef6e42",
+        "android_client_info": {
+          "package_name": "com.example.firestore"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCb6ueaYmQXR4xy_8Tv_f2qNM1px0mf-Fw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:230630925543:android:5b5613bebb9f6c29ef6e42",
         "android_client_info": {
           "package_name": "com.example.furniture"

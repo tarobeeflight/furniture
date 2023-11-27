@@ -10,6 +10,6 @@ class DbQuery with _$DbQuery {
     required String collection,
     required String property,
     required List<String> targets,
-    required int limit,
+    int? limit,
   }) = _DbQuery;
 }

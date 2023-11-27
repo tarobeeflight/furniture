@@ -47,7 +47,7 @@ class PageQuizSettingState extends ConsumerState<PageQuizSetting>{
       onPressed: () async {
         List<String>? ids;
 
-        // 「全て」以外を選択中なら範囲選択ダイアログを表示
+        /// 「全て」以外を選択中なら範囲選択ダイアログを表示
         if(genreRadioId != GENRE.all) {
           ids = await showDialog<List<String>>(
             context: context,
@@ -55,17 +55,18 @@ class PageQuizSettingState extends ConsumerState<PageQuizSetting>{
           );
         }
 
-        // DBから家具リストをランダムで取得
+        /// DBから家具リストをランダムで取得
         final usecase = FurnitureDbUsecase();
         final fList = await usecase.getRandomFurniture(numRadioId, genreRadioId, ids);
 
 
-        // クイズページで１枚目から問題を表示するための苦肉の策
+        /// クイズページで１枚目から問題を表示するための苦肉の策
         final imageNoti = ref.watch(imageNotifierProvider.notifier);  // readだとダメ
         final detailsNoti = ref.watch(detailsNotifierProvider.notifier);
         imageNoti.updateState(fList.first.imageUrl);
         detailsNoti.updateState(fList.first);
 
+        /// クイズページに移動
         context.navigateTo(RouteQuiz(list: fList));
       }
     );

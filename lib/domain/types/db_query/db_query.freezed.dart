@@ -19,7 +19,7 @@ mixin _$DbQuery {
   String get collection => throw _privateConstructorUsedError;
   String get property => throw _privateConstructorUsedError;
   List<String> get targets => throw _privateConstructorUsedError;
-  int get limit => throw _privateConstructorUsedError;
+  int? get limit => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $DbQueryCopyWith<DbQuery> get copyWith => throw _privateConstructorUsedError;
@@ -31,7 +31,7 @@ abstract class $DbQueryCopyWith<$Res> {
       _$DbQueryCopyWithImpl<$Res, DbQuery>;
   @useResult
   $Res call(
-      {String collection, String property, List<String> targets, int limit});
+      {String collection, String property, List<String> targets, int? limit});
 }
 
 /// @nodoc
@@ -50,7 +50,7 @@ class _$DbQueryCopyWithImpl<$Res, $Val extends DbQuery>
     Object? collection = null,
     Object? property = null,
     Object? targets = null,
-    Object? limit = null,
+    Object? limit = freezed,
   }) {
     return _then(_value.copyWith(
       collection: null == collection
@@ -65,10 +65,10 @@ class _$DbQueryCopyWithImpl<$Res, $Val extends DbQuery>
           ? _value.targets
           : targets // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      limit: null == limit
+      limit: freezed == limit
           ? _value.limit
           : limit // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
     ) as $Val);
   }
 }
@@ -81,7 +81,7 @@ abstract class _$$DbQueryImplCopyWith<$Res> implements $DbQueryCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String collection, String property, List<String> targets, int limit});
+      {String collection, String property, List<String> targets, int? limit});
 }
 
 /// @nodoc
@@ -98,7 +98,7 @@ class __$$DbQueryImplCopyWithImpl<$Res>
     Object? collection = null,
     Object? property = null,
     Object? targets = null,
-    Object? limit = null,
+    Object? limit = freezed,
   }) {
     return _then(_$DbQueryImpl(
       collection: null == collection
@@ -113,10 +113,10 @@ class __$$DbQueryImplCopyWithImpl<$Res>
           ? _value._targets
           : targets // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      limit: null == limit
+      limit: freezed == limit
           ? _value.limit
           : limit // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
     ));
   }
 }
@@ -128,7 +128,7 @@ class _$DbQueryImpl with DiagnosticableTreeMixin implements _DbQuery {
       {required this.collection,
       required this.property,
       required final List<String> targets,
-      required this.limit})
+      this.limit})
       : _targets = targets;
 
   @override
@@ -144,7 +144,7 @@ class _$DbQueryImpl with DiagnosticableTreeMixin implements _DbQuery {
   }
 
   @override
-  final int limit;
+  final int? limit;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -191,7 +191,7 @@ abstract class _DbQuery implements DbQuery {
       {required final String collection,
       required final String property,
       required final List<String> targets,
-      required final int limit}) = _$DbQueryImpl;
+      final int? limit}) = _$DbQueryImpl;
 
   @override
   String get collection;
@@ -200,7 +200,7 @@ abstract class _DbQuery implements DbQuery {
   @override
   List<String> get targets;
   @override
-  int get limit;
+  int? get limit;
   @override
   @JsonKey(ignore: true)
   _$$DbQueryImplCopyWith<_$DbQueryImpl> get copyWith =>

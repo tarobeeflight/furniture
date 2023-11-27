@@ -8,10 +8,10 @@ export 'package:furniture/infrastructure/firebase/data_path.dart';
 class FirestoreService {
   final db = FirebaseFirestore.instance;
 
-  // 家具データをFurnitureクラスへ変換
-  Future<Furniture> convertDataToFurniture(QueryDocumentSnapshot<Map<String, dynamic>> doc) async {
+  /// 家具データをFurnitureクラスへ変換
+  Future<Furniture> convertDataToFurniture(Map<String, dynamic> docData) async {
 
-    final preFurniture = PreFurniture.fromJson(doc.data());
+    final preFurniture = PreFurniture.fromJson(docData);
 
     // brandId → Brandクラス
     final brandDoc = await db.collection(Collection.brands).doc(preFurniture.brandId).get();
@@ -36,7 +36,7 @@ class FirestoreService {
     return furniture;
   }
 
-  // 家具一覧を取得
+  /// 家具一覧を取得
   Future<List<Furniture>> readFurnitureList(DbQuery? query) async {
     // DBから家具一覧のデータを取得
     QuerySnapshot<Map<String, dynamic>> snapshot;
@@ -44,24 +44,44 @@ class FirestoreService {
       // TODO: エラーの方がいい？
       snapshot = await db.collection(Collection.furniture).limit(1).get();
     } else if(query.property == FurnitureField.all) {
-      snapshot = await db.collection(Collection.furniture).limit(query.limit).get();
+      if(query.limit == null){
+        snapshot = await db.collection(Collection.furniture).get();
+      }
+      else{
+        snapshot = await db.collection(Collection.furniture).limit(query.limit!).get();
+      }
     }
     else {
-      snapshot = await db.collection(Collection.furniture)
-        .where(query.property, whereIn: query.targets).limit(query.limit).get();
+      if(query.limit == null) {
+        snapshot = await db.collection(Collection.furniture)
+            .where(query.property, whereIn: query.targets).get();
+      }
+      else {
+        snapshot = await db.collection(Collection.furniture)
+            .where(query.property, whereIn: query.targets).limit(query.limit!).get();
+      }
     }
 
     // DBデータ → List<Furniture>
     List<Furniture> furnitureList = [];
     for(QueryDocumentSnapshot<Map<String, dynamic>> doc in snapshot.docs) {
-      final f = await convertDataToFurniture(doc);
+      final f = await convertDataToFurniture(doc.data());
       furnitureList.add(f);
     }
 
     return furnitureList;
   }
 
-  // デザイナー一覧を取得
+  /// 特定のIDの家具を取得
+  Future<Furniture> fetchFurniture(String id) async {
+    // DBから家具データを取得
+    final data = await db.collection(Collection.furniture).doc(id).get();
+    final f = await convertDataToFurniture(data.data()!);
+
+    return f;
+  }
+
+  /// デザイナー一覧を取得
   Future<List<Designer>> readDesignerList() async {
     final snapshot = await db.collection(Collection.designers).get();
 
@@ -72,7 +92,7 @@ class FirestoreService {
     return list;
   }
 
-  // ブランド一覧を取得
+  /// ブランド一覧を取得
   Future<List<Brand>> readBrandList() async {
     final snapshot = await db.collection(Collection.brands).get();
 
@@ -83,7 +103,7 @@ class FirestoreService {
     return list;
   }
   
-  // デザイナーIDを検索
+  /// デザイナーIDを検索
   Future<String> searchDesignerId(String jaName) async {
     final snapshot = await db.collection(Collection.designers)
         .where(DesignerField.jaName, isEqualTo: jaName).limit(1).get();
@@ -91,7 +111,7 @@ class FirestoreService {
 
     return id;
   }
-  // ブランドIDを検索
+  /// ブランドIDを検索
   Future<String> searchBrandId(String jaName) async {
     final snapshot = await db.collection(Collection.brands)
         .where(DesignerField.jaName, isEqualTo: jaName).limit(1).get();
@@ -99,6 +119,13 @@ class FirestoreService {
 
     return id;
   }
+  // /// 家具の数を取得 TODO: 引数で抽象化する
+  // Future<int> countFurniture() async {
+  //   final countData = await db.collection(Collection.furniture)
+  //       .where(FurnitureField.designerId, isEqualTo: 'D0001').count().get();
+  //   final count = countData.count;
+  //   return count;
+  // }
 
   // --------------------------------------------テスト-------------------------------
 
