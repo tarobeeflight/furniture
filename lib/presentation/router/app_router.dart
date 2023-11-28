@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'app_router.gr.dart';
 
@@ -11,9 +12,20 @@ class AppRouter extends $AppRouter {
       page: RouteRoot.page,
       children: [
         AutoRoute(
-          // initial: true,
+          initial: true,
           path: 'furniture',
-          page: RouteFurnitureList.page,
+          page: RouteFurnitureRouter.page,
+          children: [
+            AutoRoute(
+              initial: true,
+              path: 'list',
+              page: RouteFurnitureList.page,
+            ),
+            AutoRoute(
+              path: 'details',
+              page: RouteFurnitureDetails.page,
+            ),
+          ]
         ),
         AutoRoute(
           path: 'designer',
@@ -24,12 +36,12 @@ class AppRouter extends $AppRouter {
           page: RouteBrandList.page,
         ),
         AutoRoute(
-          initial: true,
+          // initial: true,
           path: 'quiz',
           page: RouteQuizRouter.page,
           children: [
             AutoRoute(
-              initial: true,
+              // initial: true,
               path: 'setting',
               page: RouteQuizSetting.page,
             ),
