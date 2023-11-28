@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:furniture/presentation/theme/images.dart';
@@ -21,5 +20,4 @@ class StorageService {
       return Images.error;
     }
   }
-
 }

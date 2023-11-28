@@ -3,21 +3,24 @@ import 'package:furniture/domain/types/types.dart';
 import 'package:furniture/presentation/widgets/my_widgets.dart';
 
 class FurnitureListTile extends StatelessWidget {
-  const FurnitureListTile({required this.furniture, required this.image, super.key});
+  const FurnitureListTile({required this.furniture, super.key});
 
   final Furniture furniture;
-  final Image image;
-  // final Function() onTap;
 
   @override
   Widget build(BuildContext context) {
-    final tile = ListTile(
+    final title = Text(furniture.jaName);
+    final subtitle = Text("${furniture.designer.jaName}\n${furniture.brand.jaName}");
+    final image = FutureImageS(url: furniture.imageUrl);
+
+    return ListTile(
       isThreeLine: true,
-      leading: ImageS(image),
-      title: Text(furniture.jaName),
-      subtitle: Text("${furniture.designer.jaName}\n${furniture.brand.jaName}"),
+      leading: image,
+      title: title,
+      subtitle: subtitle,
       // onTap: ,
     );
-    return const Placeholder();
   }
 }
+
+

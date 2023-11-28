@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:furniture/domain/types/types.dart';
 import 'package:furniture/infrastructure/firebase/data_path.dart';
 
@@ -7,6 +6,20 @@ export 'package:furniture/infrastructure/firebase/data_path.dart';
 
 class FirestoreService {
   final db = FirebaseFirestore.instance;
+
+  /// クエリからデータを取得
+  Future<List<T>> feachData<T>(DbQuery query) async {
+    final List<T> list = switch(query.collection) {
+      Collection.furniture => (await readFurnitureList(query)).cast<T>(),
+      Collection.designers => (await readDesignerList()).cast<T>(),
+      Collection.brands => (await readBrandList()).cast<T>(),
+      Collection.songs => <T>[],
+      // TODO: query.collectionをenumにしてから削除
+      String() => <T>[],
+    };
+
+    return list;
+  }
 
   /// 家具データをFurnitureクラスへ変換
   Future<Furniture> convertDataToFurniture(Map<String, dynamic> docData) async {

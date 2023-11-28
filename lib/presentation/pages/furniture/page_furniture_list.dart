@@ -2,49 +2,66 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:furniture/domain/types/types.dart';
 import 'package:furniture/infrastructure/firebase/firestore_service.dart';
-import 'package:furniture/infrastructure/firebase/storage_service.dart';
-import 'package:furniture/presentation/router/app_router.gr.dart';
 import 'package:furniture/presentation/theme/images.dart';
 import 'package:furniture/presentation/widgets/image.dart';
+import 'package:furniture/presentation/widgets/list_tile.dart';
 
 @RoutePage()
-class PageFurnitureList extends StatelessWidget {
+class PageFurnitureList extends StatefulWidget {
   const PageFurnitureList({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<PageFurnitureList> createState() => _PageFurnitureListState();
+}
+
+class _PageFurnitureListState extends State<PageFurnitureList> {
+
+  late Future<List<Furniture>> list;
+
+  @override
+  void initState() {
+    super.initState();
+
     const query = DbQuery(
       collection: Collection.furniture,
       property: FurnitureField.all,
       targets: [],
-      limit: 30
     );
-    final firestore = FirestoreService();
-    final fList =
-      // await firestore.readFurnitureList(query);  // build内でawait使えない → ステイトにする？
-      firestore.testGetFurnitureList();
-    final storage = StorageService();
-    List<Image> images = [];
-    for(Furniture f in fList) {
-      final image =
-          // await storage.getImage(f.imageUrl);
-          // Images.sunsets;   // build内でawait使えない → ステイトにする？
-          Image.network('src');
-      images.add(image);
+
+    final service = FirestoreService();
+    list = service.readFurnitureList(query);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    Widget display(Image image){
+      return Center(
+        child: ImageL(image),
+      );
     }
 
-    return Scaffold(
-      body: ListView.builder(
-        itemCount: fList.length,
-        itemBuilder: (_, i) {
-          return ListTile(
-            isThreeLine: true,
-            leading: ImageS(images.elementAt(i)),
-            title: Text(fList.elementAt(i).jaName),
-            subtitle: Text("${fList.elementAt(i).designer.jaName}\n${fList.elementAt(i).brand.jaName}"),
-          );
+    final body = FutureBuilder(
+        future: list,
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+              return display(Images.error);
+            case ConnectionState.waiting:
+              return display(Images.loading);
+            case ConnectionState.done:
+              return ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (_, i) => FurnitureListTile(furniture: snapshot.data!.elementAt(i))
+              );
+            case ConnectionState.active:
+              return display(Images.sunsets);
+          }
         }
-      ),
+    );
+
+    return Scaffold(
+      body: body,
     );
   }
 }
