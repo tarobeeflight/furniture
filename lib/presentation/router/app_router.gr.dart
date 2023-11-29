@@ -46,7 +46,7 @@ abstract class $AppRouter extends _i10.RootStackRouter {
     RouteFurnitureDetails.name: (routeData) {
       return _i10.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i3.PageFurnitureDetails(),
+        child:  _i3.PageFurnitureDetails(),
       );
     },
     RouteFurnitureList.name: (routeData) {
