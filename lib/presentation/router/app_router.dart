@@ -17,12 +17,12 @@ class AppRouter extends $AppRouter {
           page: RouteFurnitureRouter.page,
           children: [
             AutoRoute(
-              // initial: true,
+              initial: true,
               path: 'list',
               page: RouteFurnitureList.page,
             ),
             AutoRoute(
-              initial: true,// TODO: 完成したら消す
+              // initial: true,// TODO: 完成したら消す
               path: 'details',
               page: RouteFurnitureDetails.page,
             ),

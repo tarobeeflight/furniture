@@ -3,9 +3,10 @@ import 'package:furniture/domain/types/types.dart';
 import 'package:furniture/presentation/widgets/my_widgets.dart';
 
 class FurnitureListTile extends StatelessWidget {
-  const FurnitureListTile({required this.furniture, super.key});
+  const FurnitureListTile({required this.furniture, required this.onTap, super.key,});
 
   final Furniture furniture;
+  final Function() onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,7 @@ class FurnitureListTile extends StatelessWidget {
       leading: image,
       title: title,
       subtitle: subtitle,
-      // onTap: ,
+      onTap: onTap,
     );
   }
 }

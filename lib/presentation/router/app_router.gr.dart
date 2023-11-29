@@ -44,9 +44,13 @@ abstract class $AppRouter extends _i10.RootStackRouter {
       );
     },
     RouteFurnitureDetails.name: (routeData) {
+      final args = routeData.argsAs<RouteFurnitureDetailsArgs>();
       return _i10.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child:  _i3.PageFurnitureDetails(),
+        child: _i3.PageFurnitureDetails(
+          furniture: args.furniture,
+          key: args.key,
+        ),
       );
     },
     RouteFurnitureList.name: (routeData) {
@@ -122,16 +126,41 @@ class RouteDesignerList extends _i10.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i3.PageFurnitureDetails]
-class RouteFurnitureDetails extends _i10.PageRouteInfo<void> {
-  const RouteFurnitureDetails({List<_i10.PageRouteInfo>? children})
-      : super(
+class RouteFurnitureDetails
+    extends _i10.PageRouteInfo<RouteFurnitureDetailsArgs> {
+  RouteFurnitureDetails({
+    required _i11.Furniture furniture,
+    _i12.Key? key,
+    List<_i10.PageRouteInfo>? children,
+  }) : super(
           RouteFurnitureDetails.name,
+          args: RouteFurnitureDetailsArgs(
+            furniture: furniture,
+            key: key,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'RouteFurnitureDetails';
 
-  static const _i10.PageInfo<void> page = _i10.PageInfo<void>(name);
+  static const _i10.PageInfo<RouteFurnitureDetailsArgs> page =
+      _i10.PageInfo<RouteFurnitureDetailsArgs>(name);
+}
+
+class RouteFurnitureDetailsArgs {
+  const RouteFurnitureDetailsArgs({
+    required this.furniture,
+    this.key,
+  });
+
+  final _i11.Furniture furniture;
+
+  final _i12.Key? key;
+
+  @override
+  String toString() {
+    return 'RouteFurnitureDetailsArgs{furniture: $furniture, key: $key}';
+  }
 }
 
 /// generated route for

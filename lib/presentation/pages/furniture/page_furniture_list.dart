@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:furniture/domain/types/types.dart';
 import 'package:furniture/infrastructure/firebase/firestore_service.dart';
+import 'package:furniture/presentation/router/app_router.gr.dart';
 import 'package:furniture/presentation/theme/images.dart';
 import 'package:furniture/presentation/widgets/image.dart';
 import 'package:furniture/presentation/widgets/list_tile.dart';
@@ -42,13 +43,22 @@ class _PageFurnitureListState extends State<PageFurnitureList> {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
               return display(Images.error);
+
             case ConnectionState.waiting:
               return display(Images.loading);
+
             case ConnectionState.done:
               return ListView.builder(
                   itemCount: snapshot.data!.length,
-                  itemBuilder: (_, i) => FurnitureListTile(furniture: snapshot.data!.elementAt(i))
+                  itemBuilder: (_, i) => FurnitureListTile(
+                    furniture: snapshot.data!.elementAt(i),
+                    onTap: () {
+                      debugPrint('\nonTap\n');
+                      context.navigateTo(RouteFurnitureDetails(furniture: snapshot.data!.elementAt(i)));
+                    },
+                  )
               );
+
             case ConnectionState.active:
               return display(Images.sunsets);
           }
