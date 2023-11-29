@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:furniture/domain/types/types.dart';
 import 'package:furniture/infrastructure/firebase/data_path.dart';
 
@@ -8,36 +7,19 @@ export 'package:furniture/infrastructure/firebase/data_path.dart';
 class FirestoreService {
   final db = FirebaseFirestore.instance;
 
-  /// クエリからデータを取得
-  Future<List<T>> feachData<T>(DbQuery query) async {
-    final List<T> list = switch(query.collection) {
-      Collection.furniture => (await readFurnitureList(query)).cast<T>(),
-      Collection.designers => (await readDesignerList()).cast<T>(),
-      Collection.brands => (await readBrandList()).cast<T>(),
-      Collection.songs => <T>[],
-      // TODO: query.collectionをenumにしてから削除
-      String() => <T>[],
-    };
-
-    return list;
-  }
-
   /// 家具データをFurnitureクラスへ変換
   Future<Furniture> convertDataToFurniture(
-      Map<String, dynamic> docData,
-      Map<String, Designer> designers,
-      Map<String, Brand> brands) async {
+        Map<String, dynamic> docData,
+        Map<String, Designer> designers,
+        Map<String, Brand> brands
+      ) async {
 
+    /// DBデータ → PreFurnitureクラス
     final preFurniture = PreFurniture.fromJson(docData);
 
-    /// brandId → Brandクラス
+    /// brandId, designerId → Designerクラス, Brandクラス
     final brand = brands[preFurniture.brandId]!;  // nullチェック
-    debugPrint('$brand');
-
-
-    /// designerId → Designerクラス
     final designer = designers[preFurniture.designerId]!;  // nullチェック
-    debugPrint('$designer');
 
     /// PreFurnitureクラス → Furnitureクラス
     final furniture = Furniture(
@@ -55,32 +37,18 @@ class FirestoreService {
   }
 
   /// 家具一覧を取得
-  Future<List<Furniture>> readFurnitureList(DbQuery? query) async {
-    final brands = await readBrandMap();
+  Future<List<Furniture>> fetchFurniture(FurnitureQuery? query) async {
+    /// デザイナー、ブランドを取得
     final designers  = await readDesignerMap();
+    final brands = await readBrandMap();
 
     /// DBから家具一覧のデータを取得
     QuerySnapshot<Map<String, dynamic>> snapshot;
     if(query == null){
-      // TODO: エラーの方がいい？
-      snapshot = await db.collection(Collection.furniture).limit(1).get();
-    } else if(query.property == FurnitureField.all) {
-      if(query.limit == null){
-        snapshot = await db.collection(Collection.furniture).get();
-      }
-      else{
-        snapshot = await db.collection(Collection.furniture).limit(query.limit!).get();
-      }
+      snapshot = await db.collection(Collection.furniture).get();
     }
     else {
-      if(query.limit == null) {
-        snapshot = await db.collection(Collection.furniture)
-            .where(query.property, whereIn: query.targets).get();
-      }
-      else {
-        snapshot = await db.collection(Collection.furniture)
-            .where(query.property, whereIn: query.targets).limit(query.limit!).get();
-      }
+      snapshot = await db.collection(Collection.furniture).where(query.property, whereIn: query.targets).get();
     }
 
     /// DBデータ → List<Furniture>
@@ -93,26 +61,16 @@ class FirestoreService {
     return furnitureList;
   }
 
-  // /// 特定のIDの家具を取得
-  // Future<Furniture> fetchFurniture(String id) async {
-  //   // DBから家具データを取得
-  //   final data = await db.collection(Collection.furniture).doc(id).get();
-  //   final f = await convertDataToFurniture(data.data()!, de);
-  //
-  //   return f;
-  // }
-
   /// デザイナー一覧を取得
-  Future<List<Designer>> readDesignerList() async {
+  Future<List<Designer>> fetchDesignerCollection() async {
     final snapshot = await db.collection(Collection.designers).get();
 
     /// DBデータ →　List<Designer>
-    List<Designer> list = snapshot.docs.map(
+    final List<Designer> list = snapshot.docs.map(
             (doc) => Designer.designerFromMap(doc.data())).toList();
 
     return list;
   }
-
   /// デザイナー一覧マップを取得
   Future<Map<String, Designer>> readDesignerMap() async {
     final snapshot = await db.collection(Collection.designers).get();
@@ -129,25 +87,15 @@ class FirestoreService {
   }
 
   /// ブランド一覧を取得
-  Future<List<Brand>> readBrandList() async {
+  Future<List<Brand>> fetchBrandCollection() async {
     final snapshot = await db.collection(Collection.brands).get();
 
-    // DBデータ →　List<Brand>
-    List<Brand> list = snapshot.docs.map(
+    /// DBデータ →　List<Brand>
+    final List<Brand> list = snapshot.docs.map(
             (doc) => Brand.fromJson(doc.data())).toList();
-
-    Map<String, Brand> brands = {};
-    for(var doc in snapshot.docs){
-      final id = doc.id;
-      final brand = Brand.fromJson(doc.data());
-      final map = <String, Brand>{id: brand};
-      brands.addAll(map);
-    }
-
 
     return list;
   }
-
   /// ブランド一覧マップを取得
   Future<Map<String, Brand>> readBrandMap() async {
     final snapshot = await db.collection(Collection.brands).get();
@@ -180,136 +128,6 @@ class FirestoreService {
     return id;
   }
 
-  // --------------------------------------------テスト-------------------------------
-
-  static final designerList = [
-    Designer(
-      enName: 'Murata Shotaro',
-      jaName: '村田勝太郎',
-      country: 'ドイツ',
-      culture: 'ヨーロッパ',
-      birthday: DateTime(1998, 5, 24),
-      faceUrl: 'faceUrl',
-      memo: 'memo'
-    ),
-    Designer(
-      enName: 'Inazumi Rico',
-      jaName: '稲角理子',
-      country: '韓国',
-      culture: 'アジア',
-      birthday: DateTime(1998, 12, 4),
-      faceUrl: 'faceUrl',
-      memo: 'memo'
-    ),
-    Designer(
-      enName: 'Onoue Yudai',
-      jaName: '尾上雄大',
-      country: 'イタリア',
-      culture: 'ヨーロッパ',
-      birthday: DateTime(1998, 8, 13),
-      faceUrl: 'faceUrl',
-      memo: 'memo'
-    ),
-  ];
-  static final brandList = [
-    const Brand(
-      enName: 'TOYOTA',
-      jaName: 'トヨタ',
-      country: '日本',
-      foundedYear: 1876,
-      memo: 'memo'
-    ),
-    const Brand(
-        enName: 'Audi',
-        jaName: 'アウディ',
-        country: 'ドイツ',
-        foundedYear: 1776,
-        memo: 'memo'
-    ),
-    const Brand(
-        enName: 'Caderac',
-        jaName: 'キャデラック',
-        country: 'アメリカ',
-        foundedYear: 1899,
-        memo: 'memo'
-    ),
-  ];
-  static final furnitureList = [
-    Furniture(
-      enName: 'Prius',
-      jaName: 'プリウス',
-      designedYear: 2002,
-      type: 'ハッチバック',
-      designer: designerList.elementAt(0),
-      brand: brandList.elementAt(0),
-      imageUrl: 'imageUrl',
-      memo: 'memo'
-    ),
-    Furniture(
-        enName: 'Crown',
-        jaName: 'クラウン',
-        designedYear: 1998,
-        type: 'セダン',
-        designer: designerList.elementAt(0),
-        brand: brandList.elementAt(0),
-        imageUrl: 'imageUrl',
-        memo: 'memo'
-    ),
-    Furniture(
-        enName: 'Sentry',
-        jaName: 'センチュリー',
-        designedYear: 1990,
-        type: 'セダン',
-        designer: designerList.elementAt(0),
-        brand: brandList.elementAt(0),
-        imageUrl: 'imageUrl',
-        memo: 'memo'
-    ),
-    Furniture(
-        enName: 'A6',
-        jaName: 'A6',
-        designedYear: 2012,
-        type: 'ステーションワゴン',
-        designer: designerList.elementAt(1),
-        brand: brandList.elementAt(1),
-        imageUrl: 'imageUrl',
-        memo: 'memo'
-    ),
-    Furniture(
-        enName: 'TT',
-        jaName: 'TT',
-        designedYear: 1996,
-        type: 'カブリオレ',
-        designer: designerList.elementAt(1),
-        brand: brandList.elementAt(1),
-        imageUrl: 'imageUrl',
-        memo: 'memo'
-    ),
-    Furniture(
-        enName: 'escarade',
-        jaName: 'エスカレード',
-        designedYear: 2020,
-        type: 'SUV',
-        designer: designerList.elementAt(2),
-        brand: brandList.elementAt(2),
-        imageUrl: 'imageUrl',
-        memo: 'memo'
-    ),
-    Furniture(
-        enName: 'Eldrad',
-        jaName: 'エルドラド',
-        designedYear: 2002,
-        type: 'SUV',
-        designer: designerList.elementAt(2),
-        brand: brandList.elementAt(2),
-        imageUrl: 'imageUrl',
-        memo: 'memo'
-    ),
-  ];
-  // テスト用の通信をしない家具リスト
-  List<Furniture> testGetFurnitureList(){
-    return furnitureList;
-  }
 }
 
 

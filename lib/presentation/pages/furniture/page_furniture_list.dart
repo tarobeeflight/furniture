@@ -22,14 +22,13 @@ class _PageFurnitureListState extends State<PageFurnitureList> {
   void initState() {
     super.initState();
 
-    const query = DbQuery(
-      collection: Collection.furniture,
-      property: FurnitureField.all,
+    const query = FurnitureQuery(
+      property: FurnitureField.designerId, // TODO: allへの対応
       targets: [],
     );
 
     final service = FirestoreService();
-    list = service.readFurnitureList(query);
+    list = service.fetchFurniture(null);
   }
 
   @override

@@ -7,7 +7,7 @@ class FurnitureDbUsecase {
 
   String convertToField(GENRE genre) {
     final field = switch(genre) {
-      GENRE.all => FurnitureField.all,
+      GENRE.all => 'all',
       GENRE.designer => FurnitureField.designerId,
       GENRE.brand => FurnitureField.brandId,
       GENRE.culture => 'culture',
@@ -16,19 +16,19 @@ class FurnitureDbUsecase {
     return field;
   }
 
-  // TODO: ランダムで取得するようにする
   Future<List<Furniture>> getRandomFurniture(int limit, GENRE genre, List<String>? targets) async {
-    /// クエリを作成
-    final query = DbQuery(
-      collection: Collection.furniture,
-      property: convertToField(genre),
-      targets: targets ?? [],
-      // ここではlimitは設けず、あとから抽出する
-    );
+    /// 検索対象が存在すればクエリを作成
+    FurnitureQuery? query;
+    if(targets != null) {
+      query = FurnitureQuery(
+        property: convertToField(genre),
+        targets: targets ?? [],
+      );
+    }
 
     /// DBから取得した家具リストからランダムに抽出
     final service = FirestoreService();
-    final fList = await service.readFurnitureList(query);
+    final fList = await service.fetchFurniture(query);  // 検索対象があればクエリが入っていて、なければコレクションごと取得する
 
     final usecase = RandomUsecase();
     final indexList = usecase.getRandomNumList(fList.length);

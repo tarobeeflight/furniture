@@ -21,14 +21,14 @@ class QuestionRangeListNotifier extends _$QuestionRangeListNotifier {
 
     Future<List<String>> getDesigners() async {
       final service = FirestoreService();
-      final dList = await service.readDesignerList();
+      final dList = await service.fetchDesignerCollection();
       final list = dList.map((e) => e.jaName).toList();
       return list;
     }
 
     Future<List<String>> getBrands() async {
       final service = FirestoreService();
-      final dList = await service.readBrandList();
+      final dList = await service.fetchBrandCollection();
       final list = dList.map((e) => e.jaName).toList();
       return list;
     }
