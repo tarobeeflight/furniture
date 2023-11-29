@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:furniture/domain/types/types.dart';
 import 'package:furniture/infrastructure/firebase/data_path.dart';
 
@@ -22,19 +23,23 @@ class FirestoreService {
   }
 
   /// 家具データをFurnitureクラスへ変換
-  Future<Furniture> convertDataToFurniture(Map<String, dynamic> docData) async {
+  Future<Furniture> convertDataToFurniture(
+      Map<String, dynamic> docData,
+      Map<String, Designer> designers,
+      Map<String, Brand> brands) async {
 
     final preFurniture = PreFurniture.fromJson(docData);
 
-    // brandId → Brandクラス
-    final brandDoc = await db.collection(Collection.brands).doc(preFurniture.brandId).get();
-    final brand = Brand.fromJson(brandDoc.data()!);
+    /// brandId → Brandクラス
+    final brand = brands[preFurniture.brandId]!;  // nullチェック
+    debugPrint('$brand');
 
-    // designerId → Designerクラス
-    final designerDoc = await db.collection(Collection.designers).doc(preFurniture.designerId).get();
-    final designer = Designer.designerFromMap(designerDoc.data()!);
 
-    // PreFurnitureクラス → Furnitureクラス
+    /// designerId → Designerクラス
+    final designer = designers[preFurniture.designerId]!;  // nullチェック
+    debugPrint('$designer');
+
+    /// PreFurnitureクラス → Furnitureクラス
     final furniture = Furniture(
       enName: preFurniture.enName,
       jaName: preFurniture.jaName,
@@ -51,7 +56,10 @@ class FirestoreService {
 
   /// 家具一覧を取得
   Future<List<Furniture>> readFurnitureList(DbQuery? query) async {
-    // DBから家具一覧のデータを取得
+    final brands = await readBrandMap();
+    final designers  = await readDesignerMap();
+
+    /// DBから家具一覧のデータを取得
     QuerySnapshot<Map<String, dynamic>> snapshot;
     if(query == null){
       // TODO: エラーの方がいい？
@@ -75,34 +83,49 @@ class FirestoreService {
       }
     }
 
-    // DBデータ → List<Furniture>
+    /// DBデータ → List<Furniture>
     List<Furniture> furnitureList = [];
     for(QueryDocumentSnapshot<Map<String, dynamic>> doc in snapshot.docs) {
-      final f = await convertDataToFurniture(doc.data());
+      final f = await convertDataToFurniture(doc.data(), designers, brands);
       furnitureList.add(f);
     }
 
     return furnitureList;
   }
 
-  /// 特定のIDの家具を取得
-  Future<Furniture> fetchFurniture(String id) async {
-    // DBから家具データを取得
-    final data = await db.collection(Collection.furniture).doc(id).get();
-    final f = await convertDataToFurniture(data.data()!);
-
-    return f;
-  }
+  // /// 特定のIDの家具を取得
+  // Future<Furniture> fetchFurniture(String id) async {
+  //   // DBから家具データを取得
+  //   final data = await db.collection(Collection.furniture).doc(id).get();
+  //   final f = await convertDataToFurniture(data.data()!, de);
+  //
+  //   return f;
+  // }
 
   /// デザイナー一覧を取得
   Future<List<Designer>> readDesignerList() async {
     final snapshot = await db.collection(Collection.designers).get();
 
-    // DBデータ →　List<Designer>
+    /// DBデータ →　List<Designer>
     List<Designer> list = snapshot.docs.map(
             (doc) => Designer.designerFromMap(doc.data())).toList();
 
     return list;
+  }
+
+  /// デザイナー一覧マップを取得
+  Future<Map<String, Designer>> readDesignerMap() async {
+    final snapshot = await db.collection(Collection.designers).get();
+
+    Map<String, Designer> designers = {};
+    for(var doc in snapshot.docs){
+      final id = doc.id;
+      final designer = Designer.designerFromMap(doc.data());
+      final map = <String, Designer>{id: designer};
+      designers.addAll(map);
+    }
+
+    return designers;
   }
 
   /// ブランド一覧を取得
@@ -113,7 +136,31 @@ class FirestoreService {
     List<Brand> list = snapshot.docs.map(
             (doc) => Brand.fromJson(doc.data())).toList();
 
+    Map<String, Brand> brands = {};
+    for(var doc in snapshot.docs){
+      final id = doc.id;
+      final brand = Brand.fromJson(doc.data());
+      final map = <String, Brand>{id: brand};
+      brands.addAll(map);
+    }
+
+
     return list;
+  }
+
+  /// ブランド一覧マップを取得
+  Future<Map<String, Brand>> readBrandMap() async {
+    final snapshot = await db.collection(Collection.brands).get();
+
+    Map<String, Brand> brands = {};
+    for(var doc in snapshot.docs){
+      final id = doc.id;
+      final brand = Brand.fromJson(doc.data());
+      final map = <String, Brand>{id: brand};
+      brands.addAll(map);
+    }
+
+    return brands;
   }
   
   /// デザイナーIDを検索
@@ -132,13 +179,6 @@ class FirestoreService {
 
     return id;
   }
-  // /// 家具の数を取得 TODO: 引数で抽象化する
-  // Future<int> countFurniture() async {
-  //   final countData = await db.collection(Collection.furniture)
-  //       .where(FurnitureField.designerId, isEqualTo: 'D0001').count().get();
-  //   final count = countData.count;
-  //   return count;
-  // }
 
   // --------------------------------------------テスト-------------------------------
 
