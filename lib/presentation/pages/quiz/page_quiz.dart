@@ -91,7 +91,7 @@ class PageQuiz extends ConsumerWidget {
       children: [
         iconRow,
         image,
-        isQuestion ? QuizText('この家具は何でしょう？') : detailsText,
+        isQuestion ? const QuizText('この家具は何でしょう？') : detailsText,
         isQuestion ? answerButton : nextButton,
       ],
     );

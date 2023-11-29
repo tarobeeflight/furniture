@@ -53,7 +53,6 @@ class _PageFurnitureListState extends State<PageFurnitureList> {
                   itemBuilder: (_, i) => FurnitureListTile(
                     furniture: snapshot.data!.elementAt(i),
                     onTap: () {
-                      debugPrint('\nonTap\n');
                       context.navigateTo(RouteFurnitureDetails(furniture: snapshot.data!.elementAt(i)));
                     },
                   )
