@@ -60,6 +60,31 @@ class FirestoreService {
 
     return furnitureList;
   }
+  Future<Map<String, Furniture>> fetchFurnitureMap(FurnitureQuery? query) async {
+    /// デザイナー、ブランドを取得
+    final designers  = await readDesignerMap();
+    final brands = await readBrandMap();
+
+    /// DBから家具一覧のデータを取得
+    QuerySnapshot<Map<String, dynamic>> snapshot;
+    if(query == null){
+      snapshot = await db.collection(Collection.furniture).get();
+    }
+    else {
+      snapshot = await db.collection(Collection.furniture).where(query.property, whereIn: query.targets).get();
+    }
+
+    /// DBデータ → Map<String, Furniture>
+    Map<String, Furniture> furnitureMap = {};
+    for(QueryDocumentSnapshot<Map<String, dynamic>> doc in snapshot.docs) {
+      final f = await convertDataToFurniture(doc.data(), designers, brands);
+      final map = {doc.id: f};
+      furnitureMap.addAll(map);
+    }
+
+    return furnitureMap;
+  }
+
 
   /// デザイナー一覧を取得
   Future<List<Designer>> fetchDesignerCollection() async {

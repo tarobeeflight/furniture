@@ -8,8 +8,9 @@ import 'package:furniture/presentation/widgets/my_widgets.dart';
 
 @RoutePage()
 class PageFurnitureDetails extends StatelessWidget {
-  const PageFurnitureDetails({required this.furniture, super.key});
+  const PageFurnitureDetails({required this.id, required this.furniture, super.key});
 
+  final String id;
   final Furniture furniture;
 
   @override
@@ -25,7 +26,7 @@ class PageFurnitureDetails extends StatelessWidget {
       if(newMemo != null && newMemo != furniture.memo){
         debugPrint('\n$newMemo\n');
         final service = FirestoreService();
-        await service.updateFurnitureMemo('F0001', newMemo);
+        await service.updateFurnitureMemo(id, newMemo);
         // TODO: 引数でもらっているものをステイトにする
       }
     }

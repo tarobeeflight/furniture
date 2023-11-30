@@ -48,6 +48,7 @@ abstract class $AppRouter extends _i10.RootStackRouter {
       return _i10.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: _i3.PageFurnitureDetails(
+          id: args.id,
           furniture: args.furniture,
           key: args.key,
         ),
@@ -129,12 +130,14 @@ class RouteDesignerList extends _i10.PageRouteInfo<void> {
 class RouteFurnitureDetails
     extends _i10.PageRouteInfo<RouteFurnitureDetailsArgs> {
   RouteFurnitureDetails({
+    required String id,
     required _i11.Furniture furniture,
     _i12.Key? key,
     List<_i10.PageRouteInfo>? children,
   }) : super(
           RouteFurnitureDetails.name,
           args: RouteFurnitureDetailsArgs(
+            id: id,
             furniture: furniture,
             key: key,
           ),
@@ -149,9 +152,12 @@ class RouteFurnitureDetails
 
 class RouteFurnitureDetailsArgs {
   const RouteFurnitureDetailsArgs({
+    required this.id,
     required this.furniture,
     this.key,
   });
+
+  final String id;
 
   final _i11.Furniture furniture;
 
@@ -159,7 +165,7 @@ class RouteFurnitureDetailsArgs {
 
   @override
   String toString() {
-    return 'RouteFurnitureDetailsArgs{furniture: $furniture, key: $key}';
+    return 'RouteFurnitureDetailsArgs{id: $id, furniture: $furniture, key: $key}';
   }
 }
 

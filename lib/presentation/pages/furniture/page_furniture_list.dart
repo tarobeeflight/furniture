@@ -17,7 +17,7 @@ class PageFurnitureList extends StatefulWidget {
 
 class _PageFurnitureListState extends State<PageFurnitureList> {
 
-  late Future<List<Furniture>> list;
+  late Future<Map<String, Furniture>> map;
 
   @override
   void initState() {
@@ -25,7 +25,7 @@ class _PageFurnitureListState extends State<PageFurnitureList> {
 
     /// 家具一覧を取得
     final service = FirestoreService();
-    list = service.fetchFurniture(null);
+    map = service.fetchFurnitureMap(null);
   }
 
   @override
@@ -38,7 +38,7 @@ class _PageFurnitureListState extends State<PageFurnitureList> {
     }
 
     final body = FutureBuilder(
-        future: list,
+        future: map,
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
@@ -51,9 +51,14 @@ class _PageFurnitureListState extends State<PageFurnitureList> {
               return ListView.builder(
                   itemCount: snapshot.data!.length,
                   itemBuilder: (_, i) => FurnitureListTile(
-                    furniture: snapshot.data!.elementAt(i),
+                    furniture: snapshot.data!.values.elementAt(i),
                     onTap: () {
-                      context.navigateTo(RouteFurnitureDetails(furniture: snapshot.data!.elementAt(i)));
+                      context.navigateTo(
+                          RouteFurnitureDetails(
+                            id: snapshot.data!.keys.elementAt(i),
+                            furniture: snapshot.data!.values.elementAt(i),
+                          )
+                      );
                     },
                   )
               );
