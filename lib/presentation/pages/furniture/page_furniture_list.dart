@@ -1,73 +1,56 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:furniture/application/state/data/furniture_map.dart';
 import 'package:furniture/domain/types/types.dart';
-import 'package:furniture/infrastructure/firebase/firestore_service.dart';
 import 'package:furniture/presentation/router/app_router.gr.dart';
 import 'package:furniture/presentation/theme/images.dart';
 import 'package:furniture/presentation/widgets/image.dart';
 import 'package:furniture/presentation/widgets/list_tile.dart';
 
 @RoutePage()
-class PageFurnitureList extends StatefulWidget {
+class PageFurnitureList extends ConsumerWidget {
   const PageFurnitureList({super.key});
 
   @override
-  State<PageFurnitureList> createState() => _PageFurnitureListState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final mapAsyncValue = ref.watch(furnitureMapNotifierProvider);
+    final map = mapAsyncValue.when<Map<String, Furniture>>(
+      data: (d) => d,
+      error: (_, e) => {},
+      loading: () => {},
+    );
 
-class _PageFurnitureListState extends State<PageFurnitureList> {
-
-  late Future<Map<String, Furniture>> map;
-
-  @override
-  void initState() {
-    super.initState();
-
-    /// 家具一覧を取得
-    final service = FirestoreService();
-    map = service.fetchFurnitureMap(null);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
-    Widget display(Image image){
+    Widget display(Image image) {
       return Center(
         child: ImageL(image),
       );
     }
 
-    final body = FutureBuilder(
-        future: map,
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-              return display(Images.error);
-
-            case ConnectionState.waiting:
-              return display(Images.loading);
-
-            case ConnectionState.done:
-              return ListView.builder(
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (_, i) => FurnitureListTile(
-                    furniture: snapshot.data!.values.elementAt(i),
-                    onTap: () {
-                      context.navigateTo(
-                          RouteFurnitureDetails(
-                            id: snapshot.data!.keys.elementAt(i),
-                            furniture: snapshot.data!.values.elementAt(i),
-                          )
-                      );
-                    },
-                  )
-              );
-
-            case ConnectionState.active:
-              return display(Images.sunsets);
-          }
-        }
+    final furnitureListTile = ListView.builder(
+        itemCount: map.length,
+        itemBuilder: (_, i) =>
+            FurnitureListTile(
+              furniture: map.values.elementAt(i),
+              onTap: () {
+                context.navigateTo(
+                    RouteFurnitureDetails(
+                      id: map.keys.elementAt(i),
+                      furniture: map.values.elementAt(i),
+                    )
+                );
+              },
+            )
     );
+
+    final body = switch(mapAsyncValue.isLoading) {
+      true => display(Images.loading),
+      false =>
+      switch(mapAsyncValue.hasValue){
+        true => furnitureListTile,
+        false => display(Images.error),
+      }
+    };
 
     return Scaffold(
       body: body,

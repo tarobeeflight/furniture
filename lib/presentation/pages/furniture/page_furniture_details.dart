@@ -1,5 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:furniture/application/state/data/furniture_map.dart';
 import 'package:furniture/domain/types/types.dart';
 import 'package:furniture/infrastructure/firebase/firestore_service.dart';
 import 'package:furniture/presentation/dialogs/my_dialogs.dart';
@@ -7,14 +9,14 @@ import 'package:furniture/presentation/widgets/my_widgets.dart';
 
 
 @RoutePage()
-class PageFurnitureDetails extends StatelessWidget {
-  const PageFurnitureDetails({required this.id, required this.furniture, super.key});
+class PageFurnitureDetails extends ConsumerWidget {
+  PageFurnitureDetails({required this.id, required this.furniture, super.key});
 
   final String id;
-  final Furniture furniture;
+  Furniture furniture;
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context, WidgetRef ref){
     void onPressed() async {
       /// メモダイアログを表示
       final newMemo = await showDialog<String?>(
@@ -22,12 +24,18 @@ class PageFurnitureDetails extends StatelessWidget {
         builder: (_) => MemoDialog(memo: furniture.memo),
       );
       
-      /// メモが変更されたらデータベースを更新
+      /// メモが変更されたら
       if(newMemo != null && newMemo != furniture.memo){
-        debugPrint('\n$newMemo\n');
+        /// データベースを更新
         final service = FirestoreService();
         await service.updateFurnitureMemo(id, newMemo);
-        // TODO: 引数でもらっているものをステイトにする
+
+        /// フィールド変数を更新
+        furniture = furniture.copyWith(memo: newMemo);
+
+        /// 家具一覧ステイトを更新
+        final notifier = ref.read(furnitureMapNotifierProvider.notifier);
+        notifier.updateMemo(id, newMemo);
       }
     }
 
