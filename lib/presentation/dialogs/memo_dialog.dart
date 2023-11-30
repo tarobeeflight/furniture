@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:furniture/presentation/widgets/my_widgets.dart';
 
 class MemoDialog extends StatelessWidget {
   MemoDialog({required this.memo, super.key});
@@ -27,15 +28,11 @@ class MemoDialog extends StatelessWidget {
     final top = Container(
       height: 50,
       color: Colors.blue,
-      child: const Row(
+      child: const Row( // TODO: FittedBoxでどうにかなる？
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [Text('メモ',
-          style: TextStyle(
-            fontSize: 20,
-            color: Colors.white,
-            fontWeight: FontWeight.w500,
-          ),
-        )],
+        children: [
+          DialogTitleText('メモ'),
+        ],
       ),
     );
     final body = Padding(

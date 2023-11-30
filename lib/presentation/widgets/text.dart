@@ -51,3 +51,16 @@ class TitleText extends StatelessWidget {
     return Text(text, style: const TextStyle(fontSize: 24),);
   }
 }
+
+class DialogTitleText extends StatelessWidget {
+  const DialogTitleText(this.text, {super.key});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(text,
+      style: const TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.w500,),
+    );
+  }
+}

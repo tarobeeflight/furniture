@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:furniture/domain/types/types.dart';
+import 'package:furniture/infrastructure/firebase/firestore_service.dart';
 import 'package:furniture/presentation/dialogs/my_dialogs.dart';
 import 'package:furniture/presentation/widgets/my_widgets.dart';
 
@@ -22,8 +23,10 @@ class PageFurnitureDetails extends StatelessWidget {
       
       /// メモが変更されたらデータベースを更新
       if(newMemo != null && newMemo != furniture.memo){
-        // TODO: DB更新 → firestore.dartに追加するところから
         debugPrint('\n$newMemo\n');
+        final service = FirestoreService();
+        await service.updateFurnitureMemo('F0001', newMemo);
+        // TODO: 引数でもらっているものをステイトにする
       }
     }
 

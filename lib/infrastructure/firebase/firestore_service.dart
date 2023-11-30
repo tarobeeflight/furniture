@@ -128,6 +128,14 @@ class FirestoreService {
     return id;
   }
 
+  /// 家具のメモ情報を更新
+  Future<void> updateFurnitureMemo(String id, String memo) async {
+    await db.collection(Collection.furniture).doc(id).update(
+        {
+          FurnitureField.memo: memo,
+        },
+    );
+  }
 }
 
 

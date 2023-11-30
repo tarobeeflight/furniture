@@ -19,31 +19,31 @@ class QuizSelectDialog extends ConsumerStatefulWidget {
 
 class QuizSelectDialogState extends ConsumerState<QuizSelectDialog> {
 
-  // チェックボックスで選択されているアイテム
+  /// チェックボックスで選択されているアイテム
   List<String> checkedItems = [];
 
   @override
   Widget build(BuildContext context) {
-    // 問題範囲リストステイトを監視
+    /// 問題範囲リストステイトを監視
     final rangeListAsyncData = ref.watch(questionRangeListNotifierProvider);
-    // 問題範囲リストステイトを選択中のジャンルに合わせて更新
+    /// 問題範囲リストステイトを選択中のジャンルに合わせて更新
     final rangeListNotifier = ref.read(questionRangeListNotifierProvider.notifier);
     rangeListNotifier.updateState(widget.genre);
-    // 表示する問題範囲を取得
+    /// 表示する問題範囲を取得
     final rangeList = rangeListAsyncData.when(
         data: (d) => d,
         error: (e, s) => ['error'],
         loading: () => ['loading']
     );
 
-    // ----------------------------- メソッド -----------------------------
+    /// ----------------------------- メソッド -----------------------------
     void onChanged(e) {
       setState(() {
         if (checkedItems.contains(e)) {
-          // すでにチェックされていたら取り除く
+          /// すでにチェックされていたら取り除く
           checkedItems.remove(e);
         } else {
-          // まだチェックされていなければ追加
+          /// まだチェックされていなければ追加
           checkedItems.add(e);
         }
       });
@@ -54,21 +54,21 @@ class QuizSelectDialogState extends ConsumerState<QuizSelectDialog> {
       final service = FirestoreService();
       List<String> ids = [];
 
-      // デザイナーが選択されているとき
+      /// デザイナーが選択されているとき
       if(widget.genre == GENRE.designer){
         for (String item in checkedItems){  // list.foreachやと非同期処理が上手くいかない。原因不明。
           String id = await service.searchDesignerId(item);
           ids.add(id);
         }
       }
-      // ブランドが選択されているとき
+      /// ブランドが選択されているとき
       else if(widget.genre == GENRE.brand) {
         for (String item in checkedItems){
           String id = await service.searchBrandId(item);
           ids.add(id);
         }
       }
-      // 文化が選択されているとき
+      /// 文化が選択されているとき
       else if(widget.genre == GENRE.culture) {
         // TODO : デザイナーから文化を検索して、そのデザイナーIDを返す
         ids.add('genre');
@@ -76,7 +76,7 @@ class QuizSelectDialogState extends ConsumerState<QuizSelectDialog> {
       return ids;
     }
 
-    // ----------------------------- ウィジェット -----------------------------
+    /// ----------------------------- ウィジェット -----------------------------
     final checkboxListView = CheckBoxListView(
       ids: checkedItems,
       onChanged: onChanged,
@@ -102,7 +102,7 @@ class QuizSelectDialogState extends ConsumerState<QuizSelectDialog> {
       ],
     );
 
-    // ----------------------------- ダイアログ -----------------------------
+    /// ----------------------------- ダイアログ -----------------------------
     return Dialog(
       child: Column(
         children: [
