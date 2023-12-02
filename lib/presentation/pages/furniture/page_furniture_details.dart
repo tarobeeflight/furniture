@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:furniture/application/state/data/furniture_map.dart';
+import 'package:furniture/application/state/data/display_furniture_map/display_furniture_map.dart';
 import 'package:furniture/domain/types/types.dart';
 import 'package:furniture/infrastructure/firebase/firestore_service.dart';
 import 'package:furniture/presentation/dialogs/my_dialogs.dart';
@@ -34,7 +34,7 @@ class PageFurnitureDetails extends ConsumerWidget {
         furniture = furniture.copyWith(memo: newMemo);
 
         /// 家具一覧ステイトを更新
-        final notifier = ref.read(furnitureMapNotifierProvider.notifier);
+        final notifier = ref.read(displayFurnitureMapNotifierProvider.notifier);
         notifier.updateMemo(id, newMemo);
       }
     }

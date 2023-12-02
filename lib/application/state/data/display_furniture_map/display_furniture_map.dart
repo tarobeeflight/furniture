@@ -1,14 +1,14 @@
 import 'package:furniture/infrastructure/firebase/firestore_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:furniture/domain/types/types.dart';
-part 'furniture_map.g.dart';
+part 'display_furniture_map.g.dart';
 
 @riverpod
-class FurnitureMapNotifier extends _$FurnitureMapNotifier {
+class DisplayFurnitureMapNotifier extends _$DisplayFurnitureMapNotifier {
   @override
-   Future<Map<String, Furniture>> build() {
+  Future<Map<String, Furniture>> build() async {
     final service = FirestoreService();
-    final map = service.fetchFurnitureMap(null);
+    final map = await service.fetchFurnitureMap(null);
     return map;
   }
 
@@ -27,4 +27,5 @@ class FurnitureMapNotifier extends _$FurnitureMapNotifier {
 
     state = AsyncValue.data(map);
   }
+
 }

@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:furniture/application/state/data/furniture_map.dart';
+import 'package:furniture/application/state/data/display_furniture_map/display_furniture_map.dart';
 import 'package:furniture/domain/types/types.dart';
 import 'package:furniture/presentation/router/app_router.gr.dart';
 import 'package:furniture/presentation/theme/images.dart';
@@ -14,7 +14,7 @@ class PageFurnitureList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final mapAsyncValue = ref.watch(furnitureMapNotifierProvider);
+    final mapAsyncValue = ref.watch(displayFurnitureMapNotifierProvider);
     final map = mapAsyncValue.when<Map<String, Furniture>>(
       data: (d) => d,
       error: (_, e) => {},
