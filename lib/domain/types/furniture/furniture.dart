@@ -14,7 +14,7 @@ class Furniture with _$Furniture {
     required String enName,
     required String jaName,
     required int designedYear,
-    required String type,
+    required FurnitureType type,
     required Designer designer,
     required Brand brand,
     required String imageUrl,

@@ -20,13 +20,14 @@ class FirestoreService {
     /// brandId, designerId → Designerクラス, Brandクラス
     final brand = brands[preFurniture.brandId]!;  // nullチェック
     final designer = designers[preFurniture.designerId]!;  // nullチェック
+    final type = FurnitureType.convertFromString(preFurniture.type);
 
     /// PreFurnitureクラス → Furnitureクラス
     final furniture = Furniture(
       enName: preFurniture.enName,
       jaName: preFurniture.jaName,
       designedYear: preFurniture.designedYear,
-      type: preFurniture.type,
+      type: type,
       designer: designer,
       brand: brand,
       imageUrl: preFurniture.imageUrl,

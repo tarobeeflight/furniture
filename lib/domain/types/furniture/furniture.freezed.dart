@@ -23,7 +23,7 @@ mixin _$Furniture {
   String get enName => throw _privateConstructorUsedError;
   String get jaName => throw _privateConstructorUsedError;
   int get designedYear => throw _privateConstructorUsedError;
-  String get type => throw _privateConstructorUsedError;
+  FurnitureType get type => throw _privateConstructorUsedError;
   Designer get designer => throw _privateConstructorUsedError;
   Brand get brand => throw _privateConstructorUsedError;
   String get imageUrl => throw _privateConstructorUsedError;
@@ -44,7 +44,7 @@ abstract class $FurnitureCopyWith<$Res> {
       {String enName,
       String jaName,
       int designedYear,
-      String type,
+      FurnitureType type,
       Designer designer,
       Brand brand,
       String imageUrl,
@@ -92,7 +92,7 @@ class _$FurnitureCopyWithImpl<$Res, $Val extends Furniture>
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
-              as String,
+              as FurnitureType,
       designer: null == designer
           ? _value.designer
           : designer // ignore: cast_nullable_to_non_nullable
@@ -141,7 +141,7 @@ abstract class _$$FurnitureImplCopyWith<$Res>
       {String enName,
       String jaName,
       int designedYear,
-      String type,
+      FurnitureType type,
       Designer designer,
       Brand brand,
       String imageUrl,
@@ -189,7 +189,7 @@ class __$$FurnitureImplCopyWithImpl<$Res>
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
-              as String,
+              as FurnitureType,
       designer: null == designer
           ? _value.designer
           : designer // ignore: cast_nullable_to_non_nullable
@@ -234,7 +234,7 @@ class _$FurnitureImpl extends _Furniture with DiagnosticableTreeMixin {
   @override
   final int designedYear;
   @override
-  final String type;
+  final FurnitureType type;
   @override
   final Designer designer;
   @override
@@ -306,7 +306,7 @@ abstract class _Furniture extends Furniture {
       {required final String enName,
       required final String jaName,
       required final int designedYear,
-      required final String type,
+      required final FurnitureType type,
       required final Designer designer,
       required final Brand brand,
       required final String imageUrl,
@@ -323,7 +323,7 @@ abstract class _Furniture extends Furniture {
   @override
   int get designedYear;
   @override
-  String get type;
+  FurnitureType get type;
   @override
   Designer get designer;
   @override
