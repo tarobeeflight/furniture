@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:furniture/domain/types/types.dart';
 
+export 'package:furniture/presentation/theme/fonts.dart';
+
 class QuizText extends StatelessWidget {
   const QuizText(this.text, {super.key});
 

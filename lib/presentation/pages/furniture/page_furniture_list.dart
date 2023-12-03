@@ -7,6 +7,7 @@ import 'package:furniture/presentation/router/app_router.gr.dart';
 import 'package:furniture/presentation/theme/images.dart';
 import 'package:furniture/presentation/widgets/image.dart';
 import 'package:furniture/presentation/widgets/list_tile.dart';
+import 'package:furniture/presentation/widgets/side_menu.dart';
 
 @RoutePage()
 class PageFurnitureList extends ConsumerWidget {
@@ -52,8 +53,17 @@ class PageFurnitureList extends ConsumerWidget {
       }
     };
 
+    final drawer = Drawer(
+      child: SafeArea(  // OSのシステムバーに被らないようにする
+        bottom: false,
+        child: FurnitureSearchMenu()
+      ),
+    );
+
     return Scaffold(
+      appBar: AppBar(title: const Text('家具一覧'),),
       body: body,
+      endDrawer: drawer,
     );
   }
 }
