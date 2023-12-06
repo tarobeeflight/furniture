@@ -17,11 +17,11 @@ class FurnitureSearchMenu extends StatelessWidget {
           onPressed: (){},
           child: const Text('クリア'),
         ),
-      shape: Border(bottom: BorderSide(color: Colors.grey)),
+      shape: const Border(bottom: BorderSide(color: Colors.grey)),
     );
 
-    /// ボディ
-    Widget searchRows(List<CategoryAndHit> data, Function()? onTap) {
+    /// 各行
+    Widget searchRows(List<_CategoryAndHit> data, Function()? onTap) {
 
       final List<Widget> contents = data.map((e) =>
               Padding(
@@ -57,6 +57,7 @@ class FurnitureSearchMenu extends StatelessWidget {
               ),
       ).toList();
 
+      /// ボディ
       final body = Padding(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
         child: Column(
@@ -76,12 +77,12 @@ class FurnitureSearchMenu extends StatelessWidget {
       ),
     );
 
-    const hitData = <CategoryAndHit>[
-      CategoryAndHit(category: 'デザイナー', hit: 'ハンス・J・ウェグナー, アルヴァ・アアルト, アルネ・ヤコブセン, ボーエ・モーエ...'),
-      CategoryAndHit(category: 'ブランド', ),
-      CategoryAndHit(category: 'タイプ', ),
+    const hitData = <_CategoryAndHit>[
+      _CategoryAndHit(category: 'デザイナー', hit: 'ハンス・J・ウェグナー, アルヴァ・アアルト, アルネ・ヤコブセン, ボーエ・モーエ...'),
+      _CategoryAndHit(category: 'ブランド', ),
+      _CategoryAndHit(category: 'タイプ', ),
     ];
-    
+
     return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -104,8 +105,105 @@ class FurnitureSearchMenu extends StatelessWidget {
   }
 }
 
-class CategoryAndHit{
-  const CategoryAndHit({required this.category, this.hit});
+class CheckMenu extends StatefulWidget {
+  const CheckMenu({required this.category, required this.choices, super.key});
+
+  final String category;
+  final List<String> choices;
+
+  @override
+  State<CheckMenu> createState() => _CheckMenuState();
+}
+
+class _CheckMenuState extends State<CheckMenu> {
+  Set<String> checkedIds = {};
+
+  @override
+  Widget build(BuildContext context) {
+
+    /// チェックボックス
+    void onChanged(String id) {
+      if(checkedIds.contains(id)){
+        setState(() {
+          checkedIds.remove(id);
+        });
+      }
+      else {
+        setState(() {
+          checkedIds.add(id);
+        });
+      }
+      
+      // debugPrint('$checkedIds');
+    }
+    void onChangedAllTile(){}
+    final List<Widget> checkBox = widget.choices.map<Widget>((e) {
+      return CheckboxListTile(
+        value: checkedIds.contains(e),
+        onChanged: (check) => onChanged(e),
+        title: Text(e, style: MyStyle.smallBlack,),
+      );
+    }).toList();
+
+    /// すべて選択の欄
+    final Widget all = ListTile(
+      onTap: onChangedAllTile,
+      title: const Text('すべて'),
+    );
+    checkBox.insert(0, all);
+
+    /// ボディ
+    final body = ListView(
+      children: checkBox,
+    );
+
+    /// ヘッダー
+    final header = ListTile(
+      leading: IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.arrow_back)
+      ),
+      title: Text(widget.category, style: MyStyle.middleBlackBold,),
+      trailing: TextButton(
+        onPressed: (){},
+        child: const Text('クリア'),
+      ),
+      shape: const Border(bottom: BorderSide(color: Colors.grey)),
+    );
+
+
+    /// ボタン
+    final decideButton = SizedBox(
+      height: 60,
+      width: 200,
+      child: ElevatedButton(
+        onPressed: (){},
+        child: Text('決定', style: MyStyle.smallBlackBold,),
+      ),
+    );
+
+    return Column(
+      children: [
+        Flexible(
+          flex: 1,
+          child: header,
+        ),
+        Flexible(
+          flex: 9,
+          child: body,
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: decideButton,
+        ),
+      ],
+    );
+  }
+}
+
+
+class _CategoryAndHit{
+  const _CategoryAndHit({required this.category, this.hit});
 
   final String category;
   final String? hit;

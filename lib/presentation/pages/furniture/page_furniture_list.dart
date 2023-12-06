@@ -53,10 +53,19 @@ class PageFurnitureList extends ConsumerWidget {
       }
     };
 
-    final drawer = Drawer(
+    const drawer = Drawer(
       child: SafeArea(  // OSのシステムバーに被らないようにする
         bottom: false,
-        child: FurnitureSearchMenu()
+        child: CheckMenu(
+          category: 'デザイナー',
+          choices: [
+            'アルヴァ・アアルト',
+            'ハンス・J・ウェグナー',
+            'チャールズ・イームズ',
+            'レイ・イームズ',
+            'ル・コルビジュエ',
+          ],
+        )
       ),
     );
 
